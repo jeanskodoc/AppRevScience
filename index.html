@@ -932,9 +932,17 @@
         function accederMatiere(matiere, niveau) {
             let fichier = '';
             
-            if (matiere === 'maths') fichier = 'AppMATHS.html';
-            else if (matiere === 'pct') fichier = 'AppPCT.html';
-            else if (matiere === 'svt') fichier = 'AppSVT.html';
+            if (niveau === 'college') {
+                // Collège : fichiers avec préfixe App
+                if (matiere === 'maths') fichier = 'AppMATHS.html';
+                else if (matiere === 'pct') fichier = 'AppPCT.html';
+                else if (matiere === 'svt') fichier = 'AppSVT.html';
+            } else {
+                // Lycée : fichiers sans préfixe
+                if (matiere === 'maths') fichier = 'Maths.html';
+                else if (matiere === 'pct') fichier = 'PC.html';
+                else if (matiere === 'svt') fichier = 'SVT.html';
+            }
             
             // Rediriger
             window.location.href = fichier;
