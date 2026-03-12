@@ -1,0 +1,3443 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision SVT - Collège</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        /* Modal d'inscription */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 20px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .modal input:focus {
+            border-color: #1e3c72;
+        }
+
+        .modal button {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        /* Header avec infos élève */
+        .student-header {
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ef 100%);
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .student-details h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .student-details p {
+            color: #666;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            background: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #1e3c72;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+        }
+
+        /* Indicateur de trimestre */
+        .trimestre-indicator {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        /* Bouton retour */
+        .back-button-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateX(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+        }
+
+        /* Filtres et contrôles */
+        .filters-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .filters-title {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filters-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        select, .action-btn {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: #1e3c72;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 160px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
+        }
+
+        .reset-btn {
+            background: #ff9800;
+        }
+
+        .reset-btn:hover {
+            background: #f57c00;
+        }
+
+        /* Navigation des questions */
+        .question-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #2a5298;
+            transform: translateX(-3px);
+        }
+
+        .nav-btn.next:hover:not(:disabled) {
+            transform: translateX(3px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .counter-badge {
+            background: #e9ecef;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            transition: width 0.3s ease;
+        }
+
+        /* Cartes d'exercices */
+        .exercises-container {
+            min-height: 400px;
+            margin: 25px 0;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border-left: 6px solid #1e3c72;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+            transition: transform 0.3s;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .badge-type {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-level {
+            background: #ffc107;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-trimestre {
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: #2d3748;
+            font-weight: 500;
+            padding: 10px 0;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .option-item {
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item:hover {
+            background: #e3f2fd;
+            border-color: #1e3c72;
+            transform: translateX(5px);
+        }
+
+        .option-item.selected {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+
+        .option-item.correct {
+            background: #a5d6a7;
+            border: 2px solid #4caf50;
+            font-weight: 500;
+        }
+
+        .option-item.incorrect {
+            background: #ffcdd2;
+            border: 2px solid #f44336;
+            font-weight: 500;
+        }
+
+        .option-prefix {
+            width: 28px;
+            height: 28px;
+            background: #1e3c72;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Section de comparaison et justification */
+        .comparison-section {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+            animation: slideDown 0.4s ease;
+        }
+
+        .comparison-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #f57c00;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-column {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .column-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .student-answer {
+            color: #1e3c72;
+        }
+
+        .correct-answer {
+            color: #4caf50;
+        }
+
+        .answer-content {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+
+        .justification-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+            animation: slideDown 0.4s ease;
+        }
+
+        .justification-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4caf50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .justification-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.6;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .justification-content p {
+            margin-bottom: 10px;
+        }
+
+        .justification-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .justification-content li {
+            margin: 5px 0;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .appreciation-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .appreciation-title {
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .criteria-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .criteria-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .criteria-item.selected {
+            background: #c8e6c9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .criteria-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .criteria-item.selected .criteria-checkbox {
+            background: #4caf50;
+            content: "✓";
+        }
+
+        .score-slider {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .slider-value {
+            color: #1e3c72;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #4caf50, #ffc107, #f44336);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #1e3c72;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .award-points-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .award-points-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .award-points-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .analysis-section {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #1e3c72;
+        }
+
+        .analysis-section.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .answer-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #4caf50;
+        }
+
+        .answer-section.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .result-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .result-correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .result-incorrect {
+            background: #ffcdd2;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .points-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn-primary, .btn-secondary, .btn-analyse {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #2a5298;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
+        }
+
+        .btn-analyse {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-analyse:hover:not(:disabled) {
+            background: #f57c00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-primary:disabled, .btn-secondary:disabled, .btn-analyse:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .no-exercises {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 1.1em;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .filters-grid {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .student-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .student-info {
+                flex-direction: column;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal d'inscription -->
+    <div id="inscriptionModal" class="modal active">
+        <div class="modal-content">
+            <h2>🌱 Bienvenue en SVT !</h2>
+            <p>Pour commencer à réviser, quel est ton prénom ?</p>
+            <input type="text" id="studentNameInput" placeholder="Entre ton prénom..." autofocus>
+            <button onclick="inscrireEleve()">C'est parti !</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent" style="display: none;">
+        <!-- Bouton retour -->
+        <div class="back-button-container">
+            <button class="back-btn" onclick="retourAccueil()">
+                <span>←</span> Retour à l'accueil
+            </button>
+        </div>
+
+        <!-- Header avec infos élève -->
+        <div class="student-header">
+            <div class="student-info">
+                <div class="student-avatar" id="studentAvatar"></div>
+                <div class="student-details">
+                    <h3 id="studentName"></h3>
+                    <p>
+                        <span>📚 Classe : <span id="studentClass"></span></span>
+                        <span class="stars" id="starsDisplay">☆☆☆☆☆</span>
+                    </p>
+                </div>
+            </div>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value" id="scoreDisplay">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="exercisesDone">0</div>
+                    <div class="stat-label">/20</div>
+                </div>
+                <button class="reset-btn action-btn" onclick="reinitialiserProgression()" style="padding: 8px 15px;" title="Réinitialiser ma progression">
+                    ⟲
+                </button>
+            </div>
+        </div>
+
+        <h1>
+            <span>🔬 Révision SVT</span>
+        </h1>
+        <div class="subtitle">Collège - 10 questions par série (20 points)</div>
+
+        <!-- Filtres -->
+        <div class="filters-section">
+            <div class="filters-title">
+                <span>⚙️</span> Filtres de révision
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Niveau</label>
+                    <select id="niveau" onchange="changerClasse()">
+                        <option value="6eme">6ème</option>
+                        <option value="5eme">5ème</option>
+                        <option value="4eme">4ème</option>
+                        <option value="3eme">3ème</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Type d'exercice</label>
+                    <select id="typeExercice">
+                        <option value="qcm">QCM (2 pts)</option>
+                        <option value="evaluation">Situation d'évaluation (2 pts)</option>
+                        <option value="vf">Vrai ou Faux (2 pts)</option>
+                        <option value="traditionnelle">Question ouverte (2 pts)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Trimestre</label>
+                    <select id="trimestre" onchange="changerTrimestre()">
+                        <option value="1">Trimestre 1</option>
+                        <option value="2">Trimestre 2</option>
+                        <option value="3">Trimestre 3</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label> </label>
+                    <button class="action-btn" onclick="genererNouvelleSerie()">
+                        <span>🎲</span> Nouvelle série
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de progression -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <!-- Navigation des questions -->
+        <div class="question-nav">
+            <button class="nav-btn" id="prevBtn" onclick="changerQuestion('prev')" disabled>
+                ← Précédent
+            </button>
+            <span class="counter-badge" id="questionCounter">
+                Question <span id="currentQuestion">1</span>/<span id="totalQuestions">10</span>
+                <span class="trimestre-indicator" id="trimestreDisplay">T1</span>
+            </span>
+            <button class="nav-btn next" id="nextBtn" onclick="changerQuestion('next')">
+                Suivant →
+            </button>
+        </div>
+
+        <div id="exercicesList" class="exercises-container">
+            <!-- Les exercices seront générés ici -->
+        </div>
+
+        <div class="footer">
+            <p>✨ Application de révision SVT - Collège ✨</p>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DONNÉES ====================
+        const exercicesSVT = {
+            qcm: {
+                theme: "QCM",
+                points: 2,
+                questions: [
+                    // 6ème - Trimestre 1
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Quelle est la fonction principale des racines d'une plante ?",
+                        options: [
+                            "Absorber l'eau et les sels minéraux",
+                            "Produire des fleurs",
+                            "Faire la photosynthèse",
+                            "Protéger la plante"
+                        ],
+                        reponse: 0,
+                        explication: "Les racines absorbent l'eau et les sels minéraux du sol nécessaires à la plante. Elles permettent également d'ancrer la plante dans le sol, mais leur fonction principale est l'absorption. Sans racines, la plante ne pourrait ni se nourrir ni rester fixée dans le sol."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Que produisent les feuilles grâce à la photosynthèse ?",
+                        options: [
+                            "De l'eau",
+                            "Du glucose (sucre)",
+                            "Des minéraux",
+                            "Du dioxyde de carbone"
+                        ],
+                        reponse: 1,
+                        explication: "Les feuilles produisent du glucose (leur nourriture) et de l'oxygène grâce à la photosynthèse. Ce processus utilise l'énergie du soleil, l'eau puisée par les racines et le dioxyde de carbone absorbé par les feuilles. Le glucose sert de source d'énergie pour la plante."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Quel est le rôle de la tige dans une plante ?",
+                        options: [
+                            "Absorber l'eau",
+                            "Transporter la sève",
+                            "Produire des graines",
+                            "Capturer la lumière"
+                        ],
+                        reponse: 1,
+                        explication: "La tige transporte la sève brute (eau et sels minéraux) des racines vers les feuilles, et la sève élaborée (glucose) des feuilles vers le reste de la plante. Elle maintient aussi la plante droite pour capter la lumière."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "De quoi les plantes ont-elles besoin pour vivre ?",
+                        options: [
+                            "Uniquement de l'eau",
+                            "Lumière, eau, sels minéraux, dioxyde de carbone",
+                            "Seulement de la terre",
+                            "De l'obscurité et de l'eau"
+                        ],
+                        reponse: 1,
+                        explication: "Les plantes ont besoin de lumière pour la photosynthèse, d'eau et de sels minéraux absorbés par les racines, et de dioxyde de carbone prélevé dans l'air. Ce sont leurs besoins vitaux."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Que se passe-t-il si on prive une plante de lumière ?",
+                        options: [
+                            "Elle pousse plus vite",
+                            "Elle jaunit et finit par mourir",
+                            "Elle produit plus de fleurs",
+                            "Rien ne change"
+                        ],
+                        reponse: 1,
+                        explication: "Sans lumière, la photosynthèse ne peut pas se faire. La plante ne produit plus de glucose, ses réserves s'épuisent, elle jaunit (chlorose) et finit par mourir."
+                    },
+                    // 6ème - Trimestre 2
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Comment appelle-t-on le transport du pollen d'une fleur à une autre ?",
+                        options: [
+                            "La fécondation",
+                            "La pollinisation",
+                            "La germination",
+                            "La photosynthèse"
+                        ],
+                        reponse: 1,
+                        explication: "La pollinisation est le transport du pollen des étamines (organes mâles) vers le pistil (organe femelle). Elle peut être assurée par le vent, les insectes, les oiseaux..."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Quelle partie de la fleur devient le fruit ?",
+                        options: [
+                            "Les pétales",
+                            "Le pistil",
+                            "Les étamines",
+                            "Le pollen"
+                        ],
+                        reponse: 1,
+                        explication: "Après la fécondation, le pistil (notamment l'ovaire) se transforme en fruit. Les ovules qu'il contient deviennent les graines. Les pétales tombent généralement."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Que contient une graine ?",
+                        options: [
+                            "Un petit fruit",
+                            "Un embryon de plante et des réserves",
+                            "De la terre",
+                            "Des fleurs miniatures"
+                        ],
+                        reponse: 1,
+                        explication: "Une graine contient un embryon de future plante, des réserves nutritives pour sa germination, et une enveloppe protectrice. C'est une structure de survie et de dispersion."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Quelles sont les conditions nécessaires à la germination ?",
+                        options: [
+                            "Lumière, terre riche, chaleur",
+                            "Eau, chaleur, oxygène",
+                            "Obscurité totale, froid, humidité",
+                            "Engrais, lumière, terre"
+                        ],
+                        reponse: 1,
+                        explication: "La germination nécessite de l'eau (pour réhydrater la graine), de la chaleur (pour activer les réactions chimiques) et de l'oxygène (pour la respiration). La lumière n'est pas toujours nécessaire au début."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce que la reproduction asexuée chez les plantes ?",
+                        options: [
+                            "Reproduction avec fleurs",
+                            "Reproduction sans graines (bouture, stolon)",
+                            "Reproduction par graines uniquement",
+                            "Reproduction par le vent"
+                        ],
+                        reponse: 1,
+                        explication: "La reproduction asexuée (ou végétative) se fait sans fleurs ni graines : bouturage, marcottage, stolons (fraisiers), tubercules (pommes de terre). Les nouveaux plants sont identiques au parent."
+                    },
+                    // 6ème - Trimestre 3
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Pourquoi les animaux ont-ils besoin de se nourrir ?",
+                        options: [
+                            "Pour grandir et avoir de l'énergie",
+                            "Pour faire joli",
+                            "Uniquement pour boire",
+                            "Ce n'est pas nécessaire"
+                        ],
+                        reponse: 0,
+                        explication: "Les animaux ont besoin de se nourrir pour : produire de l'énergie (se déplacer, chasser...), grandir, renouveler leurs cellules, et assurer leurs fonctions vitales."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Comment classer les animaux selon leur alimentation ?",
+                        options: [
+                            "Par leur couleur",
+                            "Herbivores, carnivores, omnivores",
+                            "Par leur taille",
+                            "Par leur lieu de vie"
+                        ],
+                        reponse: 1,
+                        explication: "On classe les animaux selon leur régime alimentaire : herbivores (végétaux), carnivores (viande), omnivores (végétaux et viande), insectivores (insectes), etc."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Que signifie 'végétalien' ?",
+                        options: [
+                            "Mange de tout",
+                            "Ne mange aucun produit animal",
+                            "Ne mange que de la viande",
+                            "Ne mange que des légumes"
+                        ],
+                        reponse: 1,
+                        explication: "Un végétalien ne consomme aucun produit d'origine animale : ni viande, ni poisson, ni œufs, ni produits laitiers. Le végétarien exclut la viande mais consomme parfois œufs et laitages."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Quel animal est un herbivore ?",
+                        options: [
+                            "Le lion",
+                            "Le lapin",
+                            "Le requin",
+                            "L'aigle"
+                        ],
+                        reponse: 1,
+                        explication: "Le lapin est herbivore : il se nourrit d'herbe, de légumes, de foin. Le lion, le requin et l'aigle sont des carnivores."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Pourquoi l'eau est-elle essentielle aux êtres vivants ?",
+                        options: [
+                            "Pour les réactions chimiques du corps",
+                            "Uniquement pour se laver",
+                            "Pour avoir de belles couleurs",
+                            "Pour voler"
+                        ],
+                        reponse: 0,
+                        explication: "L'eau est essentielle car elle permet les réactions chimiques du métabolisme, transporte les nutriments, régule la température, et constitue une grande partie du corps des êtres vivants."
+                    },
+                    
+                    // 5ème - Trimestre 1
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Quel est le rôle des globules rouges dans le sang ?",
+                        options: [
+                            "Combattre les infections",
+                            "Transporter l'oxygène",
+                            "Aider à la coagulation",
+                            "Produire des anticorps"
+                        ],
+                        reponse: 1,
+                        explication: "Les globules rouges contiennent de l'hémoglobine qui transporte l'oxygène vers tous les organes. Les globules blancs, eux, combattent les infections. Les plaquettes aident à la coagulation."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Où se produit la digestion des aliments ?",
+                        options: [
+                            "Uniquement dans l'estomac",
+                            "Dans tout le tube digestif",
+                            "Seulement dans l'intestin",
+                            "Dans le foie"
+                        ],
+                        reponse: 1,
+                        explication: "La digestion se produit tout au long du tube digestif, de la bouche à l'intestin grêle. Chaque organe a un rôle spécifique : la bouche broie, l'estomac acidifie, l'intestin absorbe."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Quel organe pompe le sang dans le corps ?",
+                        options: [
+                            "Les poumons",
+                            "Le cœur",
+                            "Le foie",
+                            "L'estomac"
+                        ],
+                        reponse: 1,
+                        explication: "Le cœur est une pompe musculaire qui propulse le sang dans tout le corps via les artères. Il bat environ 100 000 fois par jour."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Que transportent les artères ?",
+                        options: [
+                            "Le sang du cœur vers les organes",
+                            "Le sang des organes vers le cœur",
+                            "Uniquement du sang riche en dioxyde de carbone",
+                            "La lymphe"
+                        ],
+                        reponse: 0,
+                        explication: "Les artères transportent le sang du cœur vers les organes. Généralement, elles véhiculent du sang riche en oxygène (sauf l'artère pulmonaire)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Que transportent les veines ?",
+                        options: [
+                            "Le sang du cœur vers les organes",
+                            "Le sang des organes vers le cœur",
+                            "Uniquement du sang riche en oxygène",
+                            "Les déchets uniquement"
+                        ],
+                        reponse: 1,
+                        explication: "Les veines transportent le sang des organes vers le cœur. Généralement, elles véhiculent du sang pauvre en oxygène et riche en dioxyde de carbone."
+                    },
+                    // 5ème - Trimestre 2
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Quel est le rôle des poumons ?",
+                        options: [
+                            "Pomper le sang",
+                            "Assurer les échanges gazeux (O2 et CO2)",
+                            "Digérer les aliments",
+                            "Produire des hormones"
+                        ],
+                        reponse: 1,
+                        explication: "Les poumons assurent les échanges gazeux : l'oxygène (O2) passe dans le sang, le dioxyde de carbone (CO2) est rejeté. C'est la respiration externe."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Que deviennent les nutriments après la digestion ?",
+                        options: [
+                            "Ils sont éliminés",
+                            "Ils passent dans le sang",
+                            "Ils restent dans l'intestin",
+                            "Ils sont stockés dans l'estomac"
+                        ],
+                        reponse: 1,
+                        explication: "Les nutriments (glucose, acides aminés, etc.) passent dans le sang au niveau de l'intestin grêle. Le sang les transporte ensuite vers toutes les cellules du corps."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Quel est le trajet des aliments dans le tube digestif ?",
+                        options: [
+                            "Bouche → œsophage → estomac → intestin",
+                            "Estomac → bouche → intestin",
+                            "Intestin → estomac → œsophage → bouche",
+                            "Bouche → estomac → œsophage → intestin"
+                        ],
+                        reponse: 0,
+                        explication: "Le bon ordre est : bouche (mastication), œsophage (descente), estomac (brassage acide), intestin grêle (absorption), gros intestin (absorption d'eau)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "À quoi servent les enzymes digestives ?",
+                        options: [
+                            "À accélérer la digestion des aliments",
+                            "À transporter l'oxygène",
+                            "À combattre les infections",
+                            "À stocker l'énergie"
+                        ],
+                        reponse: 0,
+                        explication: "Les enzymes digestives sont des substances qui accélèrent la décomposition des aliments en nutriments simples (ex : amylase pour l'amidon, protéases pour les protéines)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Quel est le rôle des globules blancs ?",
+                        options: [
+                            "Transporter l'oxygène",
+                            "Défendre l'organisme contre les infections",
+                            "Transporter le dioxyde de carbone",
+                            "Aider à la digestion"
+                        ],
+                        reponse: 1,
+                        explication: "Les globules blancs (leucocytes) sont les cellules du système immunitaire. Ils protègent l'organisme contre les microbes (bactéries, virus, champignons) et autres agressions."
+                    },
+                    // 5ème - Trimestre 3
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce qu'une alimentation équilibrée ?",
+                        options: [
+                            "Manger uniquement des légumes",
+                            "Varier les aliments en quantités adaptées",
+                            "Manger beaucoup de sucreries",
+                            "Ne pas manger de viande"
+                        ],
+                        reponse: 1,
+                        explication: "Une alimentation équilibrée consiste à varier les aliments (viande/poisson/œufs, légumes, fruits, féculents, produits laitiers) en quantités adaptées à ses besoins."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Pourquoi faut-il limiter les sucres rapides ?",
+                        options: [
+                            "Ils donnent de l'énergie durable",
+                            "Ils fatiguent le pancréas et font grossir",
+                            "Ils sont bons pour les dents",
+                            "Ils aident à dormir"
+                        ],
+                        reponse: 1,
+                        explication: "Les sucres rapides (bonbons, sodas) passent vite dans le sang, fatiguent le pancréas qui doit produire beaucoup d'insuline, et favorisent le stockage des graisses."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Quel est le rôle des fibres alimentaires ?",
+                        options: [
+                            "Donner de l'énergie",
+                            "Faciliter le transit intestinal",
+                            "Construire les muscles",
+                            "Transporter l'oxygène"
+                        ],
+                        reponse: 1,
+                        explication: "Les fibres (légumes verts, fruits, céréales complètes) ne sont pas digérées mais elles facilitent le transit intestinal, préviennent la constipation et nourrissent le microbiote."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Que risque-t-on en cas de manque de calcium ?",
+                        options: [
+                            "Des problèmes osseux (ostéoporose)",
+                            "Des problèmes de vision",
+                            "Des infections fréquentes",
+                            "De l'anémie"
+                        ],
+                        reponse: 0,
+                        explication: "Le calcium est essentiel pour des os solides. Une carence peut entraîner de l'ostéoporose (fragilité osseuse) à long terme. On le trouve dans les produits laitiers, certains légumes, les eaux minérales."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Quel nutriment est la principale source d'énergie ?",
+                        options: [
+                            "Les protéines",
+                            "Les glucides",
+                            "Les vitamines",
+                            "Les minéraux"
+                        ],
+                        reponse: 1,
+                        explication: "Les glucides (sucres lents : pâtes, riz, pain ; sucres rapides) sont la principale source d'énergie du corps. Les lipides sont une réserve d'énergie."
+                    },
+                    
+                    // 4ème - Trimestre 1
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Où se produit la fécondation chez l'être humain ?",
+                        options: [
+                            "Dans l'utérus",
+                            "Dans le vagin",
+                            "Dans les trompes",
+                            "Dans l'ovaire"
+                        ],
+                        reponse: 2,
+                        explication: "La fécondation a lieu dans les trompes de Fallope, où l'ovule rencontre les spermatozoïdes. L'utérus est le lieu de la nidation (implantation de l'embryon)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Qu'est-ce qu'un caractère héréditaire ?",
+                        options: [
+                            "Un caractère acquis pendant la vie",
+                            "Un caractère transmis par les parents",
+                            "Un caractère dû à l'environnement",
+                            "Un caractère qui disparaît"
+                        ],
+                        reponse: 1,
+                        explication: "Un caractère héréditaire se transmet des parents aux enfants par les gènes. Exemples : couleur des yeux, groupe sanguin. Les caractères acquis (muscles développés) ne se transmettent pas."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Où sont produits les spermatozoïdes ?",
+                        options: [
+                            "Dans la prostate",
+                            "Dans les testicules",
+                            "Dans le pénis",
+                            "Dans les vésicules séminales"
+                        ],
+                        reponse: 1,
+                        explication: "Les spermatozoïdes sont produits en continu dans les testicules (tubes séminifères). Ils sont ensuite stockés dans l'épididyme avant d'être éjaculés."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Où sont produits les ovules ?",
+                        options: [
+                            "Dans l'utérus",
+                            "Dans les trompes",
+                            "Dans les ovaires",
+                            "Dans le vagin"
+                        ],
+                        reponse: 2,
+                        explication: "Les ovules sont produits dans les ovaires. Un seul ovule est généralement libéré à chaque cycle menstruel (ovulation), environ au 14ème jour."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Qu'est-ce que la puberté ?",
+                        options: [
+                            "La fin de la croissance",
+                            "L'âge de la retraite",
+                            "La période d'acquisition de la capacité à se reproduire",
+                            "Le début de la vie adulte"
+                        ],
+                        reponse: 2,
+                        explication: "La puberté est la période durant laquelle le corps devient capable de se reproduire. Elle est marquée par l'apparition des caractères sexuels secondaires et le démarrage de la production de gamètes."
+                    },
+                    // 4ème - Trimestre 2
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Combien de chromosomes possède un être humain ?",
+                        options: [
+                            "23",
+                            "46",
+                            "24",
+                            "48"
+                        ],
+                        reponse: 1,
+                        explication: "Un être humain possède 46 chromosomes (23 paires) dans ses cellules. Les gamètes (spermatozoïdes et ovules) n'en ont que 23 (un seul exemplaire de chaque paire)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce qu'un gène ?",
+                        options: [
+                            "Un chromosome",
+                            "Une partie d'ADN qui commande un caractère",
+                            "Une protéine",
+                            "Une cellule"
+                        ],
+                        reponse: 1,
+                        explication: "Un gène est un fragment d'ADN qui contient l'information pour fabriquer une protéine et déterminer un caractère héréditaire (couleur des yeux, groupe sanguin...)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Que signifie 'allèle' ?",
+                        options: [
+                            "Une version différente d'un même gène",
+                            "Un chromosome",
+                            "Une maladie génétique",
+                            "Une cellule reproductrice"
+                        ],
+                        reponse: 0,
+                        explication: "Un allèle est une version particulière d'un gène. Par exemple, le gène de la couleur des yeux a des allèles 'yeux bruns', 'yeux bleus', etc. Chaque personne possède deux allèles (un de chaque parent)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce qu'un chromosome ?",
+                        options: [
+                            "Une molécule d'ADN condensée",
+                            "Une cellule",
+                            "Un organe",
+                            "Un type de protéine"
+                        ],
+                        reponse: 0,
+                        explication: "Un chromosome est une molécule d'ADN très condensée (enroulée sur elle-même). Il devient visible lors de la division cellulaire. Il porte des milliers de gènes."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Quelle est la différence entre un gène dominant et un gène récessif ?",
+                        options: [
+                            "Le dominant s'exprime toujours, le récessif seulement en l'absence du dominant",
+                            "Le dominant est plus gros",
+                            "Le récessif est plus récent",
+                            "Ils sont identiques"
+                        ],
+                        reponse: 0,
+                        explication: "Un allèle dominant s'exprime même s'il n'est présent qu'en un seul exemplaire. Un allèle récessif ne s'exprime que s'il est présent en deux exemplaires (un de chaque parent)."
+                    },
+                    // 4ème - Trimestre 3
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce que la contraception ?",
+                        options: [
+                            "Un moyen d'augmenter la fertilité",
+                            "Un moyen d'éviter une grossesse",
+                            "Un traitement contre les maladies",
+                            "Une méthode de procréation"
+                        ],
+                        reponse: 1,
+                        explication: "La contraception regroupe les méthodes qui permettent d'éviter une grossesse (préservatif, pilule, stérilet, implant...). Certaines protègent aussi des IST."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce qu'une IST ?",
+                        options: [
+                            "Une infection sexuellement transmissible",
+                            "Une infection de la gorge",
+                            "Une maladie héréditaire",
+                            "Un traitement médical"
+                        ],
+                        reponse: 0,
+                        explication: "Une IST (infection sexuellement transmissible) se transmet lors de rapports sexuels. Exemples : sida (VIH), chlamydia, syphilis, hépatite B. Le préservatif protège."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Que permet le préservatif ?",
+                        options: [
+                            "Éviter les grossesses uniquement",
+                            "Éviter les grossesses et protéger des IST",
+                            "Améliorer les rapports",
+                            "Remplacer la pilule"
+                        ],
+                        reponse: 1,
+                        explication: "Le préservatif (masculin ou féminin) est le seul moyen qui protège à la fois contre les grossesses non désirées et contre les infections sexuellement transmissibles (IST)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Comment se fait la nidation ?",
+                        options: [
+                            "L'embryon s'implante dans l'utérus",
+                            "L'ovule est fécondé",
+                            "Les règles commencent",
+                            "L'ovule est expulsé"
+                        ],
+                        reponse: 0,
+                        explication: "La nidation est l'étape où l'embryon (après la fécondation et les premières divisions) s'implante dans la paroi de l'utérus pour poursuivre son développement."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Combien de temps dure une grossesse ?",
+                        options: [
+                            "6 mois",
+                            "9 mois (environ 40 semaines)",
+                            "12 mois",
+                            "3 mois"
+                        ],
+                        reponse: 1,
+                        explication: "Une grossesse dure environ 9 mois (entre 37 et 41 semaines). On compte à partir du premier jour des dernières règles jusqu'à l'accouchement."
+                    },
+                    
+                    // 3ème - Trimestre 1
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Quel est le support de l'information génétique ?",
+                        options: [
+                            "Les protéines",
+                            "L'ARN",
+                            "L'ADN",
+                            "Les glucides"
+                        ],
+                        reponse: 2,
+                        explication: "L'ADN (acide désoxyribonucléique) est le support universel de l'information génétique. Il se présente sous forme de double hélice et est constitué de gènes."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Que signifie 'sélection naturelle' ?",
+                        options: [
+                            "L'homme choisit les meilleurs individus",
+                            "Les individus adaptés survivent mieux",
+                            "Tous les individus survivent",
+                            "Le hasard seul décide"
+                        ],
+                        reponse: 1,
+                        explication: "La sélection naturelle est le processus par lequel les individus les mieux adaptés à leur environnement survivent et se reproduisent davantage, transmettant leurs caractères avantageux. Théorisé par Charles Darwin."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Qu'est-ce qu'une mutation génétique ?",
+                        options: [
+                            "Une modification de la séquence d'ADN",
+                            "Une division cellulaire",
+                            "Un type de reproduction",
+                            "Une maladie contagieuse"
+                        ],
+                        reponse: 0,
+                        explication: "Une mutation est une modification accidentelle de la séquence d'ADN. Elle peut être due à des erreurs lors de la réplication ou à des agents mutagènes (UV, produits chimiques)."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Quelles sont les conséquences possibles d'une mutation ?",
+                        options: [
+                            "Toujours néfastes",
+                            "Peut être neutre, bénéfique ou néfaste",
+                            "Toujours bénéfiques",
+                            "Aucun effet"
+                        ],
+                        reponse: 1,
+                        explication: "Les mutations peuvent être neutres (sans effet), bénéfiques (ex : résistance au paludisme), ou néfastes (ex : maladies génétiques). Elles sont la source de la diversité génétique."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Comment l'évolution des espèces se produit-elle ?",
+                        options: [
+                            "Par hasard uniquement",
+                            "Par mutations et sélection naturelle",
+                            "Par la volonté des individus",
+                            "En une seule génération"
+                        ],
+                        reponse: 1,
+                        explication: "L'évolution résulte de mutations aléatoires qui créent de la diversité, et de la sélection naturelle qui favorise les caractères avantageux. Ce processus s'étend sur des millions d'années."
+                    },
+                    // 3ème - Trimestre 2
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce que la dérive génétique ?",
+                        options: [
+                            "Une modification aléatoire de la fréquence des gènes",
+                            "Une sélection des meilleurs gènes",
+                            "Un croisement dirigé",
+                            "Une maladie génétique"
+                        ],
+                        reponse: 0,
+                        explication: "La dérive génétique est la modification aléatoire de la fréquence des allèles dans une population, surtout marquée dans les petites populations. Elle peut faire disparaître certains gènes par hasard."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce qu'une espèce ?",
+                        options: [
+                            "Des individus identiques",
+                            "Des individus pouvant se reproduire entre eux et donner une descendance fertile",
+                            "Des individus vivant au même endroit",
+                            "Des individus de même couleur"
+                        ],
+                        reponse: 1,
+                        explication: "Une espèce regroupe des individus capables de se reproduire entre eux et de donner une descendance fertile. Exemple : le cheval et l'âne sont d'espèces différentes car leur descendant (mulet) est stérile."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Comment expliquer la ressemblance entre espèces ?",
+                        options: [
+                            "Par hasard",
+                            "Par un ancêtre commun",
+                            "Par l'environnement identique",
+                            "Par croisement"
+                        ],
+                        reponse: 1,
+                        explication: "Les ressemblances entre espèces s'expliquent par la présence d'un ancêtre commun. Plus deux espèces sont proches, plus leur ancêtre commun est récent."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce qu'un fossile ?",
+                        options: [
+                            "Une roche",
+                            "Une trace ou reste d'organisme conservé dans les roches",
+                            "Un animal disparu",
+                            "Un minéral"
+                        ],
+                        reponse: 1,
+                        explication: "Un fossile est une trace (empreinte) ou un reste (coquille, os) d'organisme conservé dans les roches sédimentaires. Ils permettent d'étudier les espèces du passé et l'évolution."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Que montrent les fossiles ?",
+                        options: [
+                            "Que les espèces ont toujours existé",
+                            "Que les espèces évoluent au cours du temps",
+                            "Que toutes les espèces sont identiques",
+                            "Que les espèces n'ont pas changé"
+                        ],
+                        reponse: 1,
+                        explication: "Les fossiles montrent que les espèces ont changé au cours du temps : certaines ont disparu, d'autres ont évolué. On observe des formes de transition entre groupes."
+                    },
+                    // 3ème - Trimestre 3
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Comment se forme un nouveau gène ?",
+                        options: [
+                            "Par hasard",
+                            "Par duplication d'un gène existant puis mutation",
+                            "Par création à partir de rien",
+                            "Par l'environnement"
+                        ],
+                        reponse: 1,
+                        explication: "Un gène peut se dupliquer (copie) puis accumuler des mutations. La copie peut évoluer pour acquérir une nouvelle fonction, augmentant ainsi le nombre de gènes."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce que l'ADN ?",
+                        options: [
+                            "Une protéine",
+                            "Une molécule en forme de double hélice contenant l'info génétique",
+                            "Un glucide",
+                            "Un organite cellulaire"
+                        ],
+                        reponse: 1,
+                        explication: "L'ADN est une molécule en forme de double hélice. Elle est constituée de nucléotides (A, T, G, C) dont la séquence forme le code génétique. Découverte par Watson et Crick en 1953."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Comment l'information génétique est-elle transmise lors de la division cellulaire ?",
+                        options: [
+                            "L'ADN est partagé au hasard",
+                            "L'ADN est répliqué puis chaque cellule fille reçoit une copie",
+                            "L'ADN disparaît",
+                            "L'ADN reste dans la cellule mère"
+                        ],
+                        reponse: 1,
+                        explication: "Avant la division, l'ADN se réplique (copie). Puis lors de la mitose, les chromosomes se séparent pour que chaque cellule fille reçoive une copie identique de l'information génétique."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Quelle est la différence entre mitose et méiose ?",
+                        options: [
+                            "La mitose produit des cellules identiques, la méiose des gamètes",
+                            "La mitose produit des gamètes, la méiose des cellules identiques",
+                            "Ce sont les mêmes processus",
+                            "La mitose a lieu dans les organes reproducteurs"
+                        ],
+                        reponse: 0,
+                        explication: "La mitose produit deux cellules filles identiques à la cellule mère. La méiose (dans les testicules/ovaires) produit des gamètes avec la moitié des chromosomes (23 au lieu de 46)."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Pourquoi les enfants ressemblent-ils à leurs parents ?",
+                        options: [
+                            "Par hasard",
+                            "Par l'éducation",
+                            "Par transmission des gènes",
+                            "Par l'environnement"
+                        ],
+                        reponse: 2,
+                        explication: "Les enfants ressemblent à leurs parents car ils héritent de la moitié des gènes de chaque parent. Ces gènes déterminent leurs caractères héréditaires."
+                    }
+                ]
+            },
+            evaluation: {
+                theme: "Situation d'évaluation",
+                points: 2,
+                questions: [
+                    // 6ème - Trimestre 1
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Situation: Tu observes que les plantes de ta classe flétrissent pendant les vacances. Propose une explication et une solution.",
+                        consigne: "Rédige un paragraphe argumenté expliquant ce phénomène et proposant une solution pratique.",
+                        elements_reponse: ["Manque d'eau", "Photosynthèse perturbée", "Arrosage automatique", "Tuteur pour l'arrosage"],
+                        explication: "Les plantes flétrissent car elles manquent d'eau. Sans eau, elles ne peuvent pas faire la photosynthèse et leurs cellules perdent leur turgescence. Une solution simple est de mettre en place un système d'arrosage automatique ou de demander à quelqu'un de passer arroser."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Situation: En automne, les arbres perdent leurs feuilles. Explique pourquoi.",
+                        consigne: "Donne deux raisons expliquant ce phénomène naturel.",
+                        elements_reponse: ["Réduire les pertes d'eau", "Se protéger du froid", "Mettre en réserve les nutriments", "Cycle de vie de l'arbre"],
+                        explication: "Les arbres perdent leurs feuilles en automne pour deux raisons principales : 1) Réduire les pertes d'eau car l'évaporation est plus importante en hiver, 2) Se protéger du froid car les feuilles gèleraient et endommageraient l'arbre. Les nutriments sont mis en réserve dans les racines."
+                    },
+                    // 6ème - Trimestre 2
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Situation: Un jardinier veut planter des tomates dans son potager. Que doit-il prendre en compte ?",
+                        consigne: "Cite trois éléments essentiels à la croissance des plants de tomates.",
+                        elements_reponse: ["Ensoleillement", "Arrosage régulier", "Terre riche", "Tuteur pour grimper"],
+                        explication: "Pour planter des tomates, il faut : 1) Un bon ensoleillement (la tomate a besoin de chaleur et de lumière), 2) Un arrosage régulier sans excès, 3) Une terre riche (compost ou engrais), 4) Un tuteur pour soutenir la plante."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Situation: Après un orage, tu vois un ver de terre sur le sol. Pourquoi sort-il de terre ?",
+                        consigne: "Propose une explication à ce comportement.",
+                        elements_reponse: ["Terre gorgée d'eau", "Manque d'oxygène", "Respiration cutanée", "Recherche d'un sol sec"],
+                        explication: "Le ver de terre respire par la peau. Quand la terre est gorgée d'eau après la pluie, les galeries se remplissent d'eau et le ver manque d'oxygène. Il sort pour respirer et chercher un sol moins humide."
+                    },
+                    // 6ème - Trimestre 3
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Situation: Tu remarques que les oiseaux mangent les fruits du cerisier. Quel est le rôle de ce comportement pour l'arbre ?",
+                        consigne: "Explique comment l'arbre peut bénéficier de ce comportement.",
+                        elements_reponse: ["Dispersion des graines", "Fécondation", "Reproduction", "Nouveaux arbres"],
+                        explication: "Les oiseaux mangent les fruits et digèrent la pulpe, mais les graines résistent et sont rejetées ailleurs dans leurs déjections. Cela permet à l'arbre de disperser ses graines et de coloniser de nouveaux endroits."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Situation: Un enfant refuse de manger des légumes. Comment lui expliquer leur importance ?",
+                        consigne: "Donne trois arguments pour le convaincre.",
+                        elements_reponse: ["Vitamines", "Fibres", "Minéraux", "Croissance", "Énergie"],
+                        explication: "Les légumes sont importants car : 1) Ils apportent des vitamines qui renforcent l'immunité, 2) Ils fournissent des fibres pour le transit, 3) Ils donnent des minéraux (calcium, fer) pour la croissance et l'énergie."
+                    },
+                    // 5ème - Trimestre 1
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Situation: Après un effort physique intense, tu remarques que ton cœur bat plus vite et ta respiration s'accélère.",
+                        consigne: "Explique ces modifications physiologiques et leur utilité pour ton organisme.",
+                        elements_reponse: ["Besoin en oxygène", "Élimination du CO2", "Apport en nutriments", "Adaptation à l'effort"],
+                        explication: "Pendant l'effort, les muscles ont besoin de plus d'oxygène pour produire de l'énergie. Le cœur bat plus vite pour apporter cet oxygène (via le sang) et la respiration s'accélère pour absorber plus d'oxygène et éliminer le dioxyde de carbone produit."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Situation: Tu as une coupure au doigt. Décris ce qui se passe dans ton corps pour arrêter le saignement.",
+                        consigne: "Explique le mécanisme de la coagulation.",
+                        elements_reponse: ["Plaquettes", "Fibrine", "Caillot", "Cicatrisation"],
+                        explication: "Lors d'une coupure, les plaquettes sanguines s'agglutinent pour boucher la plaie. Des protéines (fibrine) forment un réseau qui solidifie le caillot. Cela arrête le saignement et protège pendant la cicatrisation."
+                    },
+                    // 5ème - Trimestre 2
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Situation: Un ami ne veut pas manger de légumes. Comment pourrais-tu le convaincre de leur importance ?",
+                        consigne: "Donne trois arguments scientifiques pour expliquer l'importance des légumes dans l'alimentation.",
+                        elements_reponse: ["Vitamines", "Fibres", "Minéraux", "Équilibre alimentaire"],
+                        explication: "Les légumes sont essentiels car : 1) Ils apportent des vitamines qui renforcent le système immunitaire, 2) Ils fournissent des fibres qui facilitent le transit intestinal, 3) Ils contiennent des minéraux (calcium, fer...) nécessaires au bon fonctionnement du corps."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Situation: Pourquoi faut-il se laver les dents après les repas ?",
+                        consigne: "Explique le lien avec la digestion et la santé.",
+                        elements_reponse: ["Plaque dentaire", "Caries", "Bactéries", "Acides", "Émail"],
+                        explication: "Les résidus alimentaires dans la bouche favorisent la prolifération de bactéries qui produisent des acides. Ces acides attaquent l'émail des dents et provoquent des caries. Le brossage élimine ces résidus et protège les dents."
+                    },
+                    // 5ème - Trimestre 3
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Situation: Tu as mal au ventre après avoir mangé trop de sucreries. Explique pourquoi.",
+                        consigne: "Relie cette douleur au fonctionnement du système digestif.",
+                        elements_reponse: ["Digestion difficile", "Sucres rapides", "Fermentation", "Ballonnements"],
+                        explication: "Les sucres rapides en excès fermentent dans l'intestin, produisant des gaz qui causent des ballonnements et douleurs. De plus, le pancréas doit produire beaucoup d'insuline pour réguler la glycémie, ce qui peut fatiguer l'organisme."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Situation: Pourquoi recommande-t-on de boire de l'eau régulièrement ?",
+                        consigne: "Donne trois raisons expliquant l'importance de l'hydratation.",
+                        elements_reponse: ["Transpiration", "Élimination des déchets", "Transport des nutriments", "Température corporelle"],
+                        explication: "Boire de l'eau est essentiel pour : 1) Compenser les pertes (transpiration, urine), 2) Éliminer les déchets par les reins, 3) Transporter les nutriments dans le sang, 4) Réguler la température corporelle."
+                    },
+                    // 4ème - Trimestre 1
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Situation: Un couple souhaite avoir un enfant mais rencontre des difficultés. Que peux-tu leur conseiller ?",
+                        consigne: "Propose différentes pistes d'explication et des solutions médicales possibles.",
+                        elements_reponse: ["Consultation médicale", "Fécondation in vitro", "Tests de fertilité", "Traitements hormonaux"],
+                        explication: "Les difficultés à concevoir peuvent avoir plusieurs causes : problèmes d'ovulation, qualité des spermatozoïdes, trompes bouchées... Il est conseillé de consulter un médecin qui pourra prescrire des tests de fertilité. Selon le diagnostic, des solutions comme les traitements hormonaux ou la fécondation in vitro (FIV) peuvent être proposées."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Situation: Une jeune fille a ses premières règles. Que doit-elle savoir ?",
+                        consigne: "Explique ce phénomène et donne des conseils pratiques.",
+                        elements_reponse: ["Cycle menstruel", "Ovulation", "Hygiène", "Protections"],
+                        explication: "Les règles sont l'élimination de la muqueuse utérine quand il n'y a pas eu de fécondation. Elles durent 3-7 jours et reviennent environ tous les 28 jours. Il faut utiliser des protections adaptées (serviettes, tampons) et consulter un médecin en cas de douleurs ou irrégularités."
+                    },
+                    // 4ème - Trimestre 2
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Situation: Dans une famille, tous les enfants ont les yeux bruns alors que la mère a les yeux bleus. Comment expliquer cela ?",
+                        consigne: "Utilise tes connaissances sur l'hérédité pour expliquer cette situation.",
+                        elements_reponse: ["Gène dominant", "Gène récessif", "Allèle", "Père yeux bruns"],
+                        explication: "La couleur des yeux est déterminée par des gènes. L'allèle 'yeux bruns' est dominant sur l'allèle 'yeux bleus' (récessif). Si le père transmet l'allèle 'bruns' à chaque enfant, cet allèle dominant s'exprime et donne des yeux bruns, même si la mère transmet l'allèle 'bleus'."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Situation: Pourquoi certains enfants ressemblent-ils plus à un parent qu'à l'autre ?",
+                        consigne: "Explique ce phénomène en utilisant les notions de génétique.",
+                        elements_reponse: ["Gènes", "Dominant", "Récessif", "Transmission aléatoire"],
+                        explication: "Chaque parent transmet la moitié de ses gènes à l'enfant, mais la combinaison est aléatoire. Si l'enfant hérite de plusieurs gènes dominants d'un parent, la ressemblance sera plus marquée avec ce parent. De plus, certains gènes s'expriment plus fortement que d'autres."
+                    },
+                    // 4ème - Trimestre 3
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Situation: Un adolescent veut se protéger contre les IST. Que dois-tu lui conseiller ?",
+                        consigne: "Explique l'importance de la prévention et les moyens de protection.",
+                        elements_reponse: ["Préservatif", "Dépistage", "Vaccination", "Fidélité", "Abstinence"],
+                        explication: "Pour se protéger des IST, le préservatif est le seul moyen qui protège efficacement. Il faut aussi se faire dépister régulièrement en cas de rapports non protégés. La vaccination contre certaines IST (HPV, hépatite B) est recommandée."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Situation: Une femme enceinte doit faire attention à son alimentation. Pourquoi ?",
+                        consigne: "Explique les risques liés à certains aliments pendant la grossesse.",
+                        elements_reponse: ["Toxoplasmose", "Listériose", "Alcool", "Tabac", "Développement fœtus"],
+                        explication: "Certains aliments (viande crue, poisson cru, fromage au lait cru) peuvent transmettre des maladies (toxoplasmose, listériose) dangereuses pour le fœtus. L'alcool et le tabac sont également toxiques et peuvent entraîner des malformations ou retards de développement."
+                    },
+                    // 3ème - Trimestre 1
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Situation: Dans une population, certains individus sont naturellement résistants à une maladie.",
+                        consigne: "Explique comment cette résistance a pu apparaître et se transmettre au fil des générations.",
+                        elements_reponse: ["Mutation génétique", "Sélection naturelle", "Avantage sélectif", "Transmission héréditaire"],
+                        explication: "La résistance apparaît par mutation génétique aléatoire. Ces individus résistants ont un avantage sélectif : ils survivent mieux et se reproduisent plus. Le gène de résistance se transmet alors aux générations suivantes. C'est la sélection naturelle en action."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Situation: On trouve des fossiles d'animaux marins au sommet des montagnes. Comment expliquer cela ?",
+                        consigne: "Propose une explication basée sur la géologie et l'évolution.",
+                        elements_reponse: ["Ancienne mer", "Mouvements tectoniques", "Sédiments", "Montagnes formées"],
+                        explication: "Ces fossiles montrent que la région était autrefois sous la mer. Les sédiments se sont accumulés, piégeant les coquilles. Puis les mouvements tectoniques (collision de plaques) ont soulevé ces roches pour former les montagnes."
+                    },
+                    // 3ème - Trimestre 2
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Situation: Des scientifiques trouvent des squelettes de chevaux de plus en plus grands dans des couches géologiques récentes.",
+                        consigne: "Comment interpréter cette observation ?",
+                        elements_reponse: ["Évolution", "Adaptation", "Sélection naturelle", "Ancêtre commun"],
+                        explication: "Cette observation montre que les chevaux ont évolué au cours du temps, devenant plus grands. Les individus plus grands avaient peut-être un avantage (courir plus vite, atteindre la nourriture en hauteur). Par sélection naturelle, ce caractère s'est répandu."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Situation: Deux espèces d'oiseaux ont des becs très différents selon leur alimentation.",
+                        consigne: "Explique comment ces différences ont pu apparaître.",
+                        elements_reponse: ["Adaptation", "Sélection naturelle", "Mutations", "Ressources alimentaires"],
+                        explication: "Les mutations ont créé des variations de forme de bec. Les individus dont le bec était le mieux adapté aux ressources disponibles (graines, insectes) survivaient mieux et se reproduisaient plus. Au fil des générations, les becs se sont spécialisés pour chaque régime alimentaire."
+                    },
+                    // 3ème - Trimestre 3
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Situation: Une espèce de papillons existe en deux couleurs : claire et foncée. Dans une région polluée, les papillons foncés sont plus nombreux.",
+                        consigne: "Explique ce phénomène.",
+                        elements_reponse: ["Camouflage", "Prédation", "Sélection naturelle", "Pollution"],
+                        explication: "C'est le cas du melanisme industriel. Sur les arbres noircis par la pollution, les papillons foncés sont mieux camouflés et échappent aux prédateurs. Les papillons clairs sont plus visibles et mangés. Par sélection naturelle, la fréquence des papillons foncés augmente."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Situation: Pourquoi les antibiotiques deviennent-ils inefficaces contre certaines bactéries ?",
+                        consigne: "Explique le phénomène de résistance aux antibiotiques.",
+                        elements_reponse: ["Mutations", "Sélection naturelle", "Bactéries résistantes", "Surutilisation"],
+                        explication: "Des mutations aléatoires peuvent rendre certaines bactéries résistantes à un antibiotique. Si l'antibiotique est utilisé, il tue les bactéries sensibles mais pas les résistantes, qui prolifèrent. C'est la sélection naturelle. La surutilisation des antibiotiques accélère ce processus."
+                    }
+                ]
+            },
+            vf: {
+                theme: "Vrai ou Faux",
+                points: 2,
+                questions: [
+                    // 6ème - Trimestre 1
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Les plantes respirent uniquement la nuit.",
+                        reponse: false,
+                        explication: "Faux - Les plantes respirent en permanence, jour et nuit. La respiration permet de produire de l'énergie en utilisant l'oxygène. La photosynthèse, qui produit de la matière organique, ne se fait que le jour car elle a besoin de lumière."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Toutes les plantes ont des fleurs.",
+                        reponse: false,
+                        explication: "Faux - Seules les plantes à fleurs (angiospermes) ont des fleurs. Les fougères, mousses et conifères (gymnospermes) n'en ont pas. Les fougères se reproduisent par spores, les conifères par cônes."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Les racines poussent toujours vers le bas à cause de la gravité.",
+                        reponse: true,
+                        explication: "Vrai - Les racines présentent un géotropisme positif : elles poussent vers le bas, attirées par la gravité, pour chercher l'eau et les sels minéraux. La tige a un géotropisme négatif (vers le haut)."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Les plantes ont besoin de terre pour vivre.",
+                        reponse: false,
+                        explication: "Faux - Les plantes ont besoin d'eau, de sels minéraux, de lumière et de CO2. La terre n'est qu'un support qui fournit les sels minéraux. On peut cultiver des plantes hors-sol (hydroponie) en apportant les nutriments dans l'eau."
+                    },
+                    // 6ème - Trimestre 2
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Tous les fruits sont comestibles.",
+                        reponse: false,
+                        explication: "Faux - De nombreux fruits sont toxiques pour l'homme (exemple : fruits du muguet, de l'if). Le fruit est le produit de la fécondation, mais il n'est pas forcément destiné à être mangé par l'homme."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "La pollinisation peut se faire par le vent.",
+                        reponse: true,
+                        explication: "Vrai - La pollinisation anémophile (par le vent) concerne de nombreuses plantes (graminées, noisetier, pin...). Leurs fleurs sont discrètes et produisent beaucoup de pollen léger."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Les graines peuvent survivre longtemps sans eau.",
+                        reponse: true,
+                        explication: "Vrai - Les graines sont en état de vie ralentie et peuvent survivre des années, voire des siècles, dans des conditions sèches. Elles reprennent leur activité quand les conditions redeviennent favorables (eau, chaleur)."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Toutes les graines ont besoin de lumière pour germer.",
+                        reponse: false,
+                        explication: "Faux - Certaines graines ont besoin de lumière pour germer (ex: salade, tabac), d'autres germent dans l'obscurité (ex: oignon, tomate), d'autres sont indifférentes."
+                    },
+                    // 6ème - Trimestre 3
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Le lion est un herbivore.",
+                        reponse: false,
+                        explication: "Faux - Le lion est un carnivore. Il se nourrit de viande (zèbres, antilopes...). Ses canines développées et son système digestif sont adaptés à ce régime."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Les humains sont omnivores.",
+                        reponse: true,
+                        explication: "Vrai - Les humains mangent à la fois des végétaux (fruits, légumes, céréales) et des animaux (viande, poisson, œufs). Leur système digestif est adapté à ce régime varié."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "L'eau est un aliment comme les autres.",
+                        reponse: false,
+                        explication: "Faux - L'eau n'est pas un aliment car elle ne fournit pas de nutriments ni d'énergie. C'est un composant essentiel du corps et un solvant pour les réactions chimiques, mais elle n'est pas considérée comme un aliment."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Les végétaliens mangent des œufs.",
+                        reponse: false,
+                        explication: "Faux - Les végétaliens excluent tous les produits animaux, y compris les œufs et les produits laitiers. Les végétariens excluent la viande mais consomment parfois œufs et laitages."
+                    },
+                    // 5ème - Trimestre 1
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Le sang circule toujours dans le même sens dans les vaisseaux sanguins.",
+                        reponse: true,
+                        explication: "Vrai - Grâce aux valvules (sortes de clapets) présentes dans les veines et aux contractions du cœur, le sang circule toujours dans le même sens. Les valvules empêchent le reflux sanguin."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Le cœur est un muscle qui fonctionne sans s'arrêter.",
+                        reponse: true,
+                        explication: "Vrai - Le cœur est un muscle qui se contracte environ 100 000 fois par jour sans jamais s'arrêter. Il pompe le sang vers tous les organes."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Les artères contiennent toujours du sang riche en oxygène.",
+                        reponse: false,
+                        explication: "Faux - Généralement oui, mais l'artère pulmonaire transporte du sang pauvre en oxygène du cœur vers les poumons. C'est une exception importante."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "La digestion commence dans l'estomac.",
+                        reponse: false,
+                        explication: "Faux - La digestion commence dans la bouche avec la mastication et les enzymes salivaires (amylase) qui commencent à digérer l'amidon. L'estomac continue la digestion des protéines."
+                    },
+                    // 5ème - Trimestre 2
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Les poumons sont des muscles.",
+                        reponse: false,
+                        explication: "Faux - Les poumons ne sont pas des muscles. Ce sont des organes élastiques. La respiration est assurée par les muscles intercostaux et le diaphragme qui font varier le volume de la cage thoracique."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Le sang transporte les déchets vers les reins.",
+                        reponse: true,
+                        explication: "Vrai - Le sang transporte les déchets du métabolisme (urée, créatinine) vers les reins qui les filtrent pour former l'urine. Il transporte aussi le CO2 vers les poumons."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Tous les aliments sont digérés de la même façon.",
+                        reponse: false,
+                        explication: "Faux - Les glucides, lipides et protéines sont digérés par des enzymes spécifiques, à différents endroits du tube digestif. Les fibres ne sont pas digérées."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Le foie produit la bile qui aide à digérer les graisses.",
+                        reponse: true,
+                        explication: "Vrai - Le foie produit la bile, stockée dans la vésicule biliaire. La bile émulsionne les graisses (les divise en petites gouttes) pour faciliter l'action des enzymes digestives."
+                    },
+                    // 5ème - Trimestre 3
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Les vitamines fournissent de l'énergie.",
+                        reponse: false,
+                        explication: "Faux - Les vitamines ne fournissent pas d'énergie. Elles sont essentielles en petites quantités pour le bon fonctionnement du corps (ex: vitamine C, vitamines B)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Le calcium est important pour les os.",
+                        reponse: true,
+                        explication: "Vrai - Le calcium est un minéral essentiel à la solidité des os et des dents. Il est aussi nécessaire à la contraction musculaire et à la transmission nerveuse."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Boire trop d'eau peut être dangereux.",
+                        reponse: true,
+                        explication: "Vrai - Boire trop d'eau en peu de temps (plusieurs litres) peut provoquer une hyponatrémie (dilution du sodium dans le sang), dangereuse pour le cerveau. Il faut boire régulièrement sans excès."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Les protéines servent uniquement à construire les muscles.",
+                        reponse: false,
+                        explication: "Faux - Les protéines servent à construire et réparer tous les tissus (muscles, peau, cheveux, ongles), mais aussi à fabriquer des enzymes, des hormones, des anticorps..."
+                    },
+                    // 4ème - Trimestre 1
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Un enfant hérite toujours des caractères de ses deux parents de manière égale.",
+                        reponse: false,
+                        explication: "Faux - L'hérédité est plus complexe, certains gènes sont dominants, d'autres récessifs. Par exemple, le gène des yeux bruns est dominant sur celui des yeux bleus. Un enfant peut donc avoir les yeux bruns même si un seul parent a cette caractéristique."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Les chromosomes sont présents dans toutes les cellules du corps.",
+                        reponse: true,
+                        explication: "Vrai - Toutes les cellules (sauf les globules rouges qui n'ont pas de noyau) contiennent des chromosomes dans leur noyau. Chaque espèce a un nombre fixe de chromosomes : 46 chez l'humain."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Les spermatozoïdes sont produits en continu dès la puberté.",
+                        reponse: true,
+                        explication: "Vrai - La production de spermatozoïdes (spermatogenèse) commence à la puberté et se poursuit toute la vie, de façon continue (plusieurs millions par jour)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Les ovules sont produits en continu comme les spermatozoïdes.",
+                        reponse: false,
+                        explication: "Faux - Les ovules sont produits avant la naissance (environ 400 000 à la naissance). À partir de la puberté, un seul ovule est libéré chaque mois (ovulation) jusqu'à la ménopause."
+                    },
+                    // 4ème - Trimestre 2
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "L'ADN a une structure en double hélice.",
+                        reponse: true,
+                        explication: "Vrai - La structure en double hélice de l'ADN a été découverte par Watson et Crick en 1953. Cette structure permet la réplication de l'ADN."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Tous les gènes sont exprimés dans toutes les cellules.",
+                        reponse: false,
+                        explication: "Faux - Les cellules n'expriment qu'une partie de leurs gènes selon leur fonction. Par exemple, les gènes de l'insuline ne sont exprimés que dans les cellules du pancréas."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Un enfant a 23 chromosomes de sa mère et 23 de son père.",
+                        reponse: true,
+                        explication: "Vrai - L'enfant reçoit 23 chromosomes de l'ovule (mère) et 23 du spermatozoïde (père), soit 46 chromosomes au total (23 paires)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Les chromosomes sont visibles au microscope en permanence.",
+                        reponse: false,
+                        explication: "Faux - Les chromosomes ne sont visibles que lors de la division cellulaire (mitose), quand l'ADN se condense. Entre les divisions, l'ADN est décondensé (chromatine)."
+                    },
+                    // 4ème - Trimestre 3
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "La pilule contraceptive protège des IST.",
+                        reponse: false,
+                        explication: "Faux - La pilule contraceptive protège uniquement contre les grossesses non désirées. Seul le préservatif protège contre les infections sexuellement transmissibles (IST)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Le sida (VIH) est une IST.",
+                        reponse: true,
+                        explication: "Vrai - Le VIH (virus du sida) se transmet lors de rapports sexuels non protégés, par le sang, ou de la mère à l'enfant. C'est une infection sexuellement transmissible."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "La nidation a lieu dans les trompes.",
+                        reponse: false,
+                        explication: "Faux - La nidation (implantation de l'embryon) a lieu dans l'utérus. Si l'embryon s'implante dans la trompe, c'est une grossesse extra-utérine, dangereuse."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "L'allaitement maternel est bénéfique pour le bébé.",
+                        reponse: true,
+                        explication: "Vrai - Le lait maternel contient des anticorps qui protègent le bébé contre les infections, et des nutriments adaptés à ses besoins. L'OMS recommande un allaitement exclusif les 6 premiers mois."
+                    },
+                    // 3ème - Trimestre 1
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Les mutations génétiques sont toujours néfastes pour l'organisme.",
+                        reponse: false,
+                        explication: "Faux - Certaines mutations peuvent être neutres ou même bénéfiques, contribuant à l'évolution. Par exemple, la résistance au paludisme chez certains individus. Les mutations sont la source de la diversité génétique."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "L'évolution des espèces est un processus dirigé.",
+                        reponse: false,
+                        explication: "Faux - L'évolution n'est pas dirigée vers un but. Les mutations sont aléatoires, et la sélection naturelle ne fait que favoriser les caractères avantageux dans un environnement donné."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "La sélection naturelle agit sur les individus.",
+                        reponse: true,
+                        explication: "Vrai - La sélection naturelle agit sur les individus (ceux qui survivent et se reproduisent), mais c'est la population qui évolue (fréquence des gènes qui change)."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "L'homme descend du singe.",
+                        reponse: false,
+                        explication: "Faux - L'homme et les singes actuels ont un ancêtre commun, mais l'homme ne descend pas des singes actuels. Les deux lignées ont évolué séparément depuis des millions d'années."
+                    },
+                    // 3ème - Trimestre 2
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "La dérive génétique est plus marquée dans les grandes populations.",
+                        reponse: false,
+                        explication: "Faux - La dérive génétique est plus marquée dans les petites populations. Les fluctuations aléatoires de fréquence des gènes y sont plus importantes, pouvant faire disparaître certains allèles."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Deux individus de la même espèce peuvent être très différents.",
+                        reponse: true,
+                        explication: "Vrai - Au sein d'une même espèce, il existe une grande diversité (variété des chiens par exemple). Ce sont les variations individuelles, dues aux gènes et à l'environnement."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Les fossiles permettent de dater les couches géologiques.",
+                        reponse: true,
+                        explication: "Vrai - Les fossiles stratigraphiques (caractéristiques d'une époque) permettent de dater les couches sédimentaires. C'est le principe de la biochronologie."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Toutes les espèces ont la même durée de vie sur Terre.",
+                        reponse: false,
+                        explication: "Faux - La durée de vie des espèces est variable. Certaines espèces (ex: limules) existent depuis des centaines de millions d'années, d'autres n'ont vécu que quelques millions d'années."
+                    },
+                    // 3ème - Trimestre 3
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "La résistance aux antibiotiques est un exemple d'évolution.",
+                        reponse: true,
+                        explication: "Vrai - La résistance aux antibiotiques chez les bactéries est un exemple d'évolution observable rapidement. Les bactéries résistantes survivent et se multiplient."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "L'ADN est identique dans toutes les cellules d'un individu.",
+                        reponse: true,
+                        explication: "Vrai - Toutes les cellules d'un individu (sauf les gamètes) contiennent la même information génétique (même ADN). Ce sont les gènes exprimés qui diffèrent selon le type cellulaire."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "La méiose produit des cellules identiques.",
+                        reponse: false,
+                        explication: "Faux - La méiose produit des gamètes (spermatozoïdes ou ovules) génétiquement différents les uns des autres (brassage génétique). La mitose produit des cellules identiques."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "L'environnement peut influencer l'expression des gènes.",
+                        reponse: true,
+                        explication: "Vrai - L'environnement (alimentation, température, stress) peut influencer l'expression des gènes sans modifier la séquence d'ADN (épigénétique)."
+                    }
+                ]
+            },
+            traditionnelle: {
+                theme: "Question ouverte",
+                points: 2,
+                questions: [
+                    // 6ème - Trimestre 1
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Décris le cycle de vie d'une plante à fleurs, de la graine à la graine.",
+                        mots_cles: ["Germination", "Croissance", "Floraison", "Pollinisation", "Fécondation", "Formation des graines"],
+                        explication: "Le cycle commence par la germination de la graine. La plante grandit (croissance) puis produit des fleurs (floraison). Les fleurs sont pollinisées (transport du pollen), la fécondation a lieu, et des graines se forment. Ces graines donneront naissance à de nouvelles plantes."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Quelles sont les différences entre un animal herbivore et un animal carnivore ?",
+                        mots_cles: ["Dents", "Système digestif", "Comportement", "Adaptations", "Régime alimentaire"],
+                        explication: "Les herbivores ont des dents plates pour broyer les végétaux, un long intestin pour digérer la cellulose. Les carnivores ont des canines pour déchirer la viande, un intestin plus court. Leur comportement de prédation diffère aussi (chasse vs broutage)."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Explique le rôle des racines, de la tige et des feuilles dans une plante.",
+                        mots_cles: ["Absorption", "Transport", "Photosynthèse", "Sève", "Eau"],
+                        explication: "Les racines absorbent l'eau et les sels minéraux du sol. La tige transporte la sève brute (eau + sels) vers les feuilles et la sève élaborée (glucose) vers les autres organes. Les feuilles fabriquent le glucose par photosynthèse grâce à la lumière."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Pourquoi les plantes ont-elles besoin de lumière ?",
+                        mots_cles: ["Photosynthèse", "Glucose", "Énergie", "Chlorophylle", "Croissance"],
+                        explication: "Les plantes ont besoin de lumière pour la photosynthèse. La chlorophylle capte l'énergie lumineuse pour fabriquer du glucose à partir d'eau et de CO2. Ce glucose sert de nourriture pour la croissance et les fonctions vitales."
+                    },
+                    // 6ème - Trimestre 2
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Explique le rôle des abeilles dans la reproduction des plantes à fleurs.",
+                        mots_cles: ["Pollinisation", "Pollen", "Nectar", "Fécondation", "Fruits"],
+                        explication: "Les abeilles butinent les fleurs pour récolter le nectar et le pollen. En passant de fleur en fleur, elles transportent le pollen (pollinisation), permettant la fécondation. Sans pollinisation, pas de fruits ni de graines."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Décris les conditions nécessaires à la germination d'une graine.",
+                        mots_cles: ["Eau", "Chaleur", "Oxygène", "Graines", "Germination"],
+                        explication: "La germination nécessite de l'eau (pour réhydrater la graine et activer les enzymes), une température favorable (chaleur), et de l'oxygène (pour la respiration). Certaines graines ont besoin de lumière ou d'obscurité."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Comment les graines sont-elles dispersées dans la nature ?",
+                        mots_cles: ["Vent", "Animaux", "Eau", "Dispersion", "Colonisation"],
+                        explication: "Les graines sont dispersées par le vent (pissenlit, érable), par les animaux (fruits mangés, graines accrochées aux poils), par l'eau (coco), ou par explosion du fruit (genêt). Cela permet de coloniser de nouveaux territoires."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Quelle est la différence entre une graine et un fruit ?",
+                        mots_cles: ["Ovule", "Ovaire", "Protection", "Dispersion", "Reproduction"],
+                        explication: "La graine est issue de l'ovule fécondé. Elle contient l'embryon de la future plante. Le fruit est issu de l'ovaire de la fleur. Il protège les graines et aide à leur dispersion (par les animaux qui le mangent)."
+                    },
+                    // 6ème - Trimestre 3
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Explique pourquoi l'eau est essentielle à la vie.",
+                        mots_cles: ["Solvant", "Transport", "Température", "Réactions", "Cellules"],
+                        explication: "L'eau est essentielle car elle est le solvant des réactions chimiques du corps, elle transporte les nutriments et les déchets, elle régule la température (transpiration), et elle constitue 60-70% du corps humain."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce qu'une chaîne alimentaire ? Donne un exemple.",
+                        mots_cles: ["Producteur", "Consommateur", "Prédateur", "Proie", "Énergie"],
+                        explication: "Une chaîne alimentaire montre le transfert d'énergie d'un être vivant à un autre. Exemple : herbe (producteur) → lapin (consommateur herbivore) → renard (consommateur carnivore). Chaque flèche signifie 'est mangé par'."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Quelle est la différence entre un herbivore et un omnivore ?",
+                        mots_cles: ["Végétaux", "Animaux", "Régime", "Dents", "Digestion"],
+                        explication: "Un herbivore se nourrit exclusivement de végétaux (herbe, feuilles, fruits). Un omnivore se nourrit à la fois de végétaux et d'animaux. L'humain, le cochon, l'ours sont omnivores."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Pourquoi doit-on manger varié ?",
+                        mots_cles: ["Nutriments", "Vitamines", "Minéraux", "Équilibre", "Santé"],
+                        explication: "Manger varié permet d'apporter tous les nutriments nécessaires : protéines (construction), glucides (énergie), lipides (réserves), vitamines et minéraux (fonctionnement). Chaque aliment a des apports différents."
+                    },
+                    // 5ème - Trimestre 1
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Explique le trajet des aliments dans le tube digestif et leur transformation.",
+                        mots_cles: ["Bouche", "Œsophage", "Estomac", "Intestin grêle", "Gros intestin", "Enzymes", "Nutriments"],
+                        explication: "Les aliments passent par : bouche (mastication et enzymes salivaires), œsophage (descente), estomac (brassage acide et enzymes gastriques), intestin grêle (absorption des nutriments grâce aux enzymes pancréatiques et biliaires), gros intestin (absorption d'eau). Les déchets forment les selles."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Comment fonctionne la circulation sanguine ?",
+                        mots_cles: ["Cœur", "Artères", "Veines", "Capillaires", "Sang", "Oxygène", "Dioxyde de carbone"],
+                        explication: "Le cœur pompe le sang. Les artères transportent le sang riche en oxygène du cœur vers les organes. Les veines ramènent le sang pauvre en oxygène au cœur. Les capillaires sont de minuscules vaisseaux où se font les échanges (oxygène, nutriments, déchets)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Quel est le rôle du sang dans l'organisme ?",
+                        mots_cles: ["Transport", "Oxygène", "Nutriments", "Déchets", "Défense"],
+                        explication: "Le sang transporte l'oxygène des poumons vers les organes, les nutriments de l'intestin vers les cellules, et les déchets vers les reins. Il assure aussi la défense immunitaire (globules blancs) et la coagulation (plaquettes)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Décris le rôle du cœur dans la circulation sanguine.",
+                        mots_cles: ["Pompe", "Contractions", "Oreillettes", "Ventricules", "Valvules"],
+                        explication: "Le cœur est une pompe musculaire à 4 cavités : oreillettes (réception) et ventricules (propulsion). Ses contractions rythmées propulsent le sang dans les artères. Les valvules empêchent le reflux. Il bat environ 70 fois par minute au repos."
+                    },
+                    // 5ème - Trimestre 2
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Explique le rôle des poumons dans la respiration.",
+                        mots_cles: ["Alvéoles", "Oxygène", "CO2", "Échanges gazeux", "Sang"],
+                        explication: "Dans les poumons, les bronches se divisent jusqu'aux alvéoles (petits sacs). C'est là que se font les échanges gazeux avec le sang : l'oxygène passe dans le sang, le dioxyde de carbone passe du sang à l'air expiré."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Quelle est la différence entre respiration et ventilation ?",
+                        mots_cles: ["Mécanique", "Échanges", "Inspiration", "Expiration", "Cellules"],
+                        explication: "La ventilation est le mouvement mécanique d'entrée et sortie d'air (inspiration/expiration). La respiration est l'ensemble des échanges gazeux, au niveau des poumons (externe) et des cellules (interne, production d'énergie)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Explique le rôle des enzymes dans la digestion.",
+                        mots_cles: ["Protéines", "Glucides", "Lipides", "Transformation", "Nutriments"],
+                        explication: "Les enzymes digestives sont des protéines qui accélèrent la décomposition des aliments en nutriments simples : amylase (amidon en glucose), protéases (protéines en acides aminés), lipases (lipides en acides gras)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Décris le trajet de l'air dans l'appareil respiratoire.",
+                        mots_cles: ["Nez", "Trachée", "Bronches", "Poumons", "Alvéoles"],
+                        explication: "L'air entre par le nez ou la bouche, passe par la trachée, puis les bronches, les bronchioles, et arrive dans les alvéoles pulmonaires où se font les échanges gazeux. Il ressort par le même chemin."
+                    },
+                    // 5ème - Trimestre 3
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Pourquoi une alimentation équilibrée est-elle importante ?",
+                        mots_cles: ["Nutriments", "Énergie", "Croissance", "Santé", "Maladies"],
+                        explication: "Une alimentation équilibrée apporte tous les nutriments en quantités adaptées : protéines pour la croissance, glucides pour l'énergie, lipides, vitamines et minéraux. Un déséquilibre peut entraîner des carences ou des maladies (obésité, diabète)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce qu'un groupe d'aliments ? Donne des exemples.",
+                        mots_cles: ["Viande/poisson/œufs", "Laitages", "Fruits/légumes", "Féculents", "Matières grasses"],
+                        explication: "Les groupes d'aliments : viande/poisson/œufs (protéines), produits laitiers (calcium), fruits et légumes (vitamines, fibres), féculents (glucides lents), matières grasses (lipides), sucres (glucides rapides). Il faut varier."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Explique le rôle des reins dans l'organisme.",
+                        mots_cles: ["Filtration", "Sang", "Urine", "Déchets", "Équilibre"],
+                        explication: "Les reins filtrent le sang pour éliminer les déchets (urée, créatinine) et réguler l'eau et les sels minéraux. Ils produisent l'urine, stockée dans la vessie. Ils maintiennent l'équilibre interne (homéostasie)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Pourquoi l'activité physique est-elle bonne pour la santé ?",
+                        mots_cles: ["Cœur", "Muscles", "Os", "Poids", "Bien-être"],
+                        explication: "L'activité physique renforce le cœur et les muscles, améliore la circulation, renforce les os, aide à maintenir un poids santé, réduit le stress et améliore le bien-être général. Elle prévient de nombreuses maladies."
+                    },
+                    // 4ème - Trimestre 1
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Compare les appareils reproducteurs masculin et féminin et explique leur fonctionnement.",
+                        mots_cles: ["Testicules", "Ovaires", "Spermatozoïdes", "Ovules", "Hormones", "Cycle menstruel"],
+                        explication: "L'appareil masculin produit des spermatozoïdes (testicules). L'appareil féminin produit des ovules (ovaires) et abrite le futur bébé (utérus). Les hormones contrôlent le cycle menstruel. La rencontre d'un spermatozoïde et d'un ovule donne un embryon."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Explique ce qu'est l'hérédité et comment elle fonctionne.",
+                        mots_cles: ["Gènes", "ADN", "Chromosomes", "Parents", "Enfants", "Caractères"],
+                        explication: "L'hérédité est la transmission des caractères des parents aux enfants. Elle est codée dans l'ADN, organisé en chromosomes et en gènes. Chaque parent transmet la moitié de ses gènes. Certains caractères sont dominants, d'autres récessifs."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Décris les changements physiques à la puberté.",
+                        mots_cles: ["Hormones", "Croissance", "Caractères sexuels", "Pilosité", "Voix"],
+                        explication: "À la puberté, les hormones provoquent : croissance rapide, apparition de la pilosité, développement des organes génitaux, mue de la voix (garçons), développement des seins (filles), premières règles (filles), première éjaculation (garçons)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Explique le fonctionnement du cycle menstruel.",
+                        mots_cles: ["Ovulation", "Règles", "Hormones", "Utérus", "Ovaires"],
+                        explication: "Le cycle menstruel dure environ 28 jours. L'ovaire libère un ovule (ovulation vers le 14e jour). L'utérus se prépare à accueillir un embryon. S'il n'y a pas de fécondation, la muqueuse utérine est éliminée (règles)."
+                    },
+                    // 4ème - Trimestre 2
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Explique comment l'information génétique est organisée dans la cellule.",
+                        mots_cles: ["Noyau", "Chromosomes", "ADN", "Gènes", "Allèles"],
+                        explication: "Dans le noyau, l'ADN est condensé en chromosomes. Chaque chromosome contient de nombreux gènes. Un gène est une portion d'ADN qui commande un caractère. Chaque gène peut exister en différentes versions (allèles)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Quelle est la différence entre gène dominant et gène récessif ?",
+                        mots_cles: ["Expression", "Allèle", "Hétérozygote", "Homozygote", "Caractère"],
+                        explication: "Un allèle dominant s'exprime même s'il n'est présent qu'en un seul exemplaire. Un allèle récessif ne s'exprime que s'il est présent en deux exemplaires. Exemple : l'allèle 'yeux bruns' est dominant sur 'yeux bleus'."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Explique pourquoi les enfants ressemblent à leurs parents mais ne sont pas identiques.",
+                        mots_cles: ["Mélange", "Gènes", "Aléatoire", "Combinaison", "Variation"],
+                        explication: "Chaque parent transmet la moitié de ses gènes, mais de façon aléatoire. L'enfant reçoit donc une combinaison unique des gènes parentaux. De plus, certains gènes sont dominants, d'autres récessifs, ce qui crée des variations."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce qu'une maladie génétique ? Donne un exemple.",
+                        mots_cles: ["Mutation", "Gène", "Héréditaire", "Anomalie", "Trisomie"],
+                        explication: "Une maladie génétique est due à une anomalie d'un ou plusieurs gènes (mutation). Exemples : mucoviscidose (gène défectueux), trisomie 21 (chromosome supplémentaire). Elle peut être héréditaire ou survenir par mutation nouvelle."
+                    },
+                    // 4ème - Trimestre 3
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Explique les différentes méthodes de contraception.",
+                        mots_cles: ["Préservatif", "Pilule", "Stérilet", "Implant", "Mécanique/hormonal"],
+                        explication: "Les contraceptions mécaniques (préservatif, stérilet au cuivre) empêchent la rencontre des gamètes. Les contraceptions hormonales (pilule, implant, stérilet hormonal) bloquent l'ovulation. Seul le préservatif protège des IST."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce qu'une IST et comment s'en protéger ?",
+                        mots_cles: ["Infection", "Transmission", "Préservatif", "Dépistage", "Traitement"],
+                        explication: "Une IST (infection sexuellement transmissible) se transmet lors de rapports non protégés. Exemples : VIH, chlamydia, syphilis. On s'en protège par le préservatif, le dépistage régulier, et la vaccination pour certaines (HPV, hépatite B)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Explique le développement de l'embryon pendant la grossesse.",
+                        mots_cles: ["Nidation", "Placenta", "Cordon ombilical", "Organes", "Croissance"],
+                        explication: "Après la nidation dans l'utérus, l'embryon se développe : formation des organes (1er trimestre), croissance et maturation (2e et 3e trimestres). Le placenta permet les échanges avec la mère via le cordon ombilical."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Pourquoi l'alcool et le tabac sont-ils dangereux pendant la grossesse ?",
+                        mots_cles: ["Fœtus", "Placenta", "Malformations", "Retard", "Toxicité"],
+                        explication: "L'alcool et le tabac traversent le placenta et atteignent le fœtus. Ils peuvent provoquer des malformations, un retard de croissance, des problèmes de développement cérébral, et augmenter les risques de fausse couche."
+                    },
+                    // 3ème - Trimestre 1
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Explique comment l'information génétique est transmise lors de la division cellulaire.",
+                        mots_cles: ["ADN", "Chromosomes", "Mitose", "Méiose", "Gènes", "Réplication"],
+                        explication: "Avant la division, l'ADN se réplique pour former des chromosomes à deux chromatides. Lors de la mitose (division normale), chaque cellule fille reçoit une copie identique. Lors de la méiose (formation des gamètes), le nombre de chromosomes est divisé par deux."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Décris le mécanisme de l'évolution des espèces.",
+                        mots_cles: ["Sélection naturelle", "Mutations", "Adaptation", "Générations", "Environnement", "Espèces"],
+                        explication: "Des mutations aléatoires créent de la diversité. Les individus les mieux adaptés à leur environnement survivent mieux et se reproduisent plus (sélection naturelle). Au fil des générations, ces adaptations s'accumulent et peuvent mener à l'apparition de nouvelles espèces."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Qu'est-ce qu'une mutation et quels sont ses effets possibles ?",
+                        mots_cles: ["ADN", "Erreur", "Néfaste", "Bénéfique", "Neutre", "Diversité"],
+                        explication: "Une mutation est une modification de la séquence d'ADN (erreur de copie, agent mutagène). Elle peut être néfaste (maladie), bénéfique (avantage sélectif), ou neutre (sans effet). Les mutations sont la source de la diversité génétique."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Explique le rôle de la sélection naturelle dans l'évolution.",
+                        mots_cles: ["Adaptation", "Survie", "Reproduction", "Caractères", "Environnement"],
+                        explication: "La sélection naturelle est le processus par lequel les individus porteurs de caractères avantageux dans un environnement donné survivent mieux et se reproduisent davantage. Leurs caractères se répandent dans la population au fil des générations."
+                    },
+                    // 3ème - Trimestre 2
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Quelle est la différence entre sélection naturelle et dérive génétique ?",
+                        mots_cles: ["Aléatoire", "Adaptation", "Population", "Gènes", "Évolution"],
+                        explication: "La sélection naturelle est un processus non aléatoire : les caractères avantageux sont favorisés. La dérive génétique est due au hasard (ex: catastrophe naturelle) et affecte surtout les petites populations. Les deux mécanismes font évoluer les populations."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Comment les fossiles nous renseignent-ils sur l'évolution ?",
+                        mots_cles: ["Anciens", "Âge", "Ancêtres", "Transformation", "Disparition"],
+                        explication: "Les fossiles montrent que les espèces du passé étaient différentes des actuelles. On observe des formes de transition entre groupes. Ils permettent de dater l'apparition et la disparition des espèces, et de reconstituer les liens de parenté."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Explique la notion d'ancêtre commun.",
+                        mots_cles: ["Parenté", "Caractères", "Espèces", "Divergence", "Évolution"],
+                        explication: "Un ancêtre commun est une espèce disparue dont sont issues plusieurs espèces actuelles. Plus deux espèces partagent de caractères, plus leur ancêtre commun est récent. Exemple : l'humain et le chimpanzé ont un ancêtre commun."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce qu'une espèce ? Comment définit-on une espèce ?",
+                        mots_cles: ["Reproduction", "Descendance fertile", "Critères", "Génétique", "Morphologie"],
+                        explication: "Une espèce est un ensemble d'individus capables de se reproduire entre eux et de donner une descendance fertile. On utilise aussi des critères génétiques et morphologiques pour distinguer les espèces."
+                    },
+                    // 3ème - Trimestre 3
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Explique le phénomène de résistance aux antibiotiques.",
+                        mots_cles: ["Bactéries", "Mutations", "Sélection naturelle", "Antibiotiques", "Survie"],
+                        explication: "Des mutations aléatoires peuvent rendre certaines bactéries résistantes à un antibiotique. Sous l'effet de l'antibiotique, les bactéries sensibles meurent, les résistantes survivent et se multiplient. C'est un exemple d'évolution rapide."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Comment l'environnement peut-il influencer l'évolution des espèces ?",
+                        mots_cles: ["Adaptation", "Sélection", "Ressources", "Climat", "Prédateurs"],
+                        explication: "L'environnement exerce une pression de sélection : les individus les mieux adaptés aux conditions (climat, ressources, prédateurs) survivent mieux. Un changement d'environnement peut favoriser de nouveaux caractères."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce que l'épigénétique ?",
+                        mots_cles: ["Environnement", "Expression des gènes", "Modifications", "Hérédité", "ADN"],
+                        explication: "L'épigénétique étudie les modifications de l'expression des gènes sans changement de la séquence d'ADN. L'environnement (alimentation, stress) peut influencer ces modifications, qui peuvent parfois être transmises aux descendants."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Explique pourquoi les populations humaines sont différentes mais appartiennent à la même espèce.",
+                        mots_cles: ["Variations", "Gènes", "Métissage", "Reproduction", "Espèce"],
+                        explication: "Tous les humains appartiennent à la même espèce (Homo sapiens) car ils peuvent se reproduire entre eux et avoir une descendance fertile. Les différences (couleur peau, yeux, cheveux) sont des variations génétiques mineures."
+                    }
+                ]
+            }
+        };
+
+        // ==================== ÉTAT GLOBAL ====================
+        let eleve = {
+            nom: '',
+            classe: '6eme',
+            points: 0,
+            exercicesValides: [],
+            exercicesTotal: 0
+        };
+
+        let exercicesActuels = [];
+        let questionActuelle = 0;
+        let reponsesUtilisateur = {};
+
+        // ==================== FONCTIONS PRINCIPALES ====================
+        function inscrireEleve() {
+            const nom = document.getElementById('studentNameInput').value.trim();
+            if (nom === '') {
+                alert('Veuillez entrer ton prénom pour continuer !');
+                return;
+            }
+
+            eleve.nom = nom;
+            document.getElementById('inscriptionModal').classList.remove('active');
+            document.getElementById('mainContent').style.display = 'block';
+            
+            mettreAJourAffichageEleve();
+            chargerProgression();
+            genererNouvelleSerie();
+        }
+
+        function mettreAJourAffichageEleve() {
+            document.getElementById('studentAvatar').textContent = eleve.nom.charAt(0).toUpperCase();
+            document.getElementById('studentName').textContent = eleve.nom;
+            document.getElementById('studentClass').textContent = eleve.classe;
+            document.getElementById('scoreDisplay').textContent = eleve.points;
+            document.getElementById('exercisesDone').textContent = eleve.exercicesValides.length;
+            
+            const etoiles = Math.min(5, Math.floor(eleve.points / 5));
+            document.getElementById('starsDisplay').textContent = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
+        }
+
+        function changerClasse() {
+            eleve.classe = document.getElementById('niveau').value;
+            mettreAJourAffichageEleve();
+            sauvegarderProgression();
+            genererNouvelleSerie();
+        }
+
+        function changerTrimestre() {
+            genererNouvelleSerie();
+        }
+
+        function sauvegarderProgression() {
+            localStorage.setItem('eleveSVT', JSON.stringify(eleve));
+        }
+
+        function chargerProgression() {
+            const saved = localStorage.getItem('eleveSVT');
+            if (saved) {
+                const savedEleve = JSON.parse(saved);
+                if (savedEleve.nom === eleve.nom) {
+                    eleve = savedEleve;
+                    document.getElementById('niveau').value = eleve.classe;
+                    mettreAJourAffichageEleve();
+                }
+            }
+        }
+
+        function reinitialiserProgression() {
+            if (confirm('Es-tu sûr de vouloir réinitialiser ta progression ?')) {
+                eleve.points = 0;
+                eleve.exercicesValides = [];
+                eleve.exercicesTotal = 0;
+                sauvegarderProgression();
+                mettreAJourAffichageEleve();
+                genererNouvelleSerie();
+            }
+        }
+
+        function genererNouvelleSerie() {
+            const niveau = document.getElementById('niveau').value;
+            const type = document.getElementById('typeExercice').value;
+            const trimestre = parseInt(document.getElementById('trimestre').value);
+            
+            const exercicesFiltres = exercicesSVT[type].questions.filter(ex => 
+                ex.niveau === niveau && ex.trimestre === trimestre
+            );
+
+            if (exercicesFiltres.length === 0) {
+                document.getElementById('exercicesList').innerHTML = '<div class="no-exercises">📭 Aucun exercice disponible pour ce trimestre</div>';
+                return;
+            }
+
+            // Prendre 10 questions maximum
+            exercicesActuels = exercicesFiltres
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 10);
+
+            questionActuelle = 0;
+            reponsesUtilisateur = {};
+            afficherQuestion(questionActuelle);
+            mettreAJourNavigation();
+            
+            // Mettre à jour l'affichage du trimestre
+            document.getElementById('trimestreDisplay').textContent = `T${trimestre}`;
+            document.getElementById('totalQuestions').textContent = exercicesActuels.length;
+        }
+
+        function afficherQuestion(index) {
+            if (!exercicesActuels.length || index < 0 || index >= exercicesActuels.length) return;
+
+            const container = document.getElementById('exercicesList');
+            const ex = exercicesActuels[index];
+            const type = document.getElementById('typeExercice').value;
+            const points = exercicesSVT[type].points;
+            
+            const exerciceId = `${type}_${Date.now()}_${index}`;
+            const dejaValide = eleve.exercicesValides.includes(exerciceId);
+            
+            let contenu = `
+                <div class="exercise-card" data-exercice-id="${exerciceId}">
+                    <div class="card-header">
+                        <span class="badge-type">${exercicesSVT[type].theme}</span>
+                        <span class="badge-level">${ex.niveau}</span>
+                        <span class="badge-trimestre">Trimestre ${ex.trimestre}</span>
+                    </div>
+            `;
+
+            if (type === 'qcm') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    <ul class="options-list" id="options-${exerciceId}">
+                        ${ex.options.map((opt, i) => `
+                            <li class="option-item" onclick="selectionnerReponse('${exerciceId}', ${i})">
+                                <span class="option-prefix">${String.fromCharCode(65 + i)}</span>
+                                ${opt}
+                            </li>
+                        `).join('')}
+                    </ul>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" id="compare-${exerciceId}" onclick="comparerEtJustifierQCM('${exerciceId}', ${ex.reponse}, '${ex.explication.replace(/'/g, "\\'")}', ${points})" ${dejaValide ? 'disabled' : ''}>
+                            🔍 Comparer et voir la justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'evaluation') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    <p style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        <strong>📝 Consigne :</strong> ${ex.consigne}
+                    </p>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" onclick="comparerEtJustifierEvaluation('${exerciceId}', ${JSON.stringify(ex.elements_reponse)}, '${ex.explication.replace(/'/g, "\\'")}', ${points})">
+                            🔍 Auto-évaluation avec justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'vf') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    
+                    <div class="options-list" id="options-${exerciceId}">
+                        <li class="option-item" onclick="selectionnerVF('${exerciceId}', true)">
+                            <span class="option-prefix">V</span>
+                            Vrai
+                        </li>
+                        <li class="option-item" onclick="selectionnerVF('${exerciceId}', false)">
+                            <span class="option-prefix">F</span>
+                            Faux
+                        </li>
+                    </div>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" id="compare-${exerciceId}" onclick="comparerEtJustifierVF('${exerciceId}', ${ex.reponse}, '${ex.explication.replace(/'/g, "\\'")}', ${points})" ${dejaValide ? 'disabled' : ''}>
+                            🔍 Comparer et voir la justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'traditionnelle') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" onclick="comparerEtJustifierTraditionnelle('${exerciceId}', ${JSON.stringify(ex.mots_cles)}, '${ex.explication.replace(/'/g, "\\'")}', ${points})">
+                            🔍 Auto-évaluation avec justification
+                        </button>
+                    </div>
+                `;
+            }
+
+            contenu += `</div>`;
+            container.innerHTML = contenu;
+            
+            document.getElementById('currentQuestion').textContent = index + 1;
+            document.getElementById('totalQuestions').textContent = exercicesActuels.length;
+            
+            const progression = ((index + 1) / exercicesActuels.length) * 100;
+            document.getElementById('progressFill').style.width = `${progression}%`;
+        }
+
+        function changerQuestion(direction) {
+            if (direction === 'prev' && questionActuelle > 0) {
+                questionActuelle--;
+            } else if (direction === 'next' && questionActuelle < exercicesActuels.length - 1) {
+                questionActuelle++;
+            }
+            
+            afficherQuestion(questionActuelle);
+            mettreAJourNavigation();
+        }
+
+        function mettreAJourNavigation() {
+            document.getElementById('prevBtn').disabled = questionActuelle === 0;
+            document.getElementById('nextBtn').disabled = questionActuelle === exercicesActuels.length - 1;
+        }
+
+        function selectionnerReponse(exerciceId, optionIndex) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            options[optionIndex].classList.add('selected');
+            
+            reponsesUtilisateur[exerciceId] = {
+                type: 'qcm',
+                reponse: optionIndex
+            };
+            
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            if (comparisonDiv) comparisonDiv.innerHTML = '';
+        }
+
+        function selectionnerVF(exerciceId, valeur) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            const clickedOption = event.currentTarget;
+            clickedOption.classList.add('selected');
+            clickedOption.dataset.valeur = valeur;
+            
+            reponsesUtilisateur[exerciceId] = {
+                type: 'vf',
+                reponse: valeur
+            };
+            
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            if (comparisonDiv) comparisonDiv.innerHTML = '';
+        }
+
+        function comparerEtJustifierQCM(exerciceId, bonneReponse, explication, pointsMax) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            let reponseSelectionnee = -1;
+            let reponseTexte = '';
+            
+            options.forEach((opt, index) => {
+                if (opt.classList.contains('selected')) {
+                    reponseSelectionnee = index;
+                    reponseTexte = opt.textContent.replace(/[A-D]/, '').trim();
+                }
+            });
+
+            if (reponseSelectionnee === -1) {
+                alert('Sélectionne d\'abord une réponse !');
+                return;
+            }
+
+            const ex = exercicesActuels[questionActuelle];
+            const bonneReponseTexte = ex.options[bonneReponse];
+            
+            // Marquer visuellement les réponses
+            options.forEach((opt, index) => {
+                opt.classList.remove('correct', 'incorrect');
+                if (index === bonneReponse) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            if (reponseSelectionnee === bonneReponse) {
+                options[reponseSelectionnee].classList.add('correct');
+            } else {
+                options[reponseSelectionnee].classList.add('incorrect');
+            }
+
+            const estCorrect = reponseSelectionnee === bonneReponse;
+            const valeurDefaut = estCorrect ? pointsMax : Math.floor(pointsMax / 2);
+
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            comparisonDiv.innerHTML = `
+                <div class="comparison-section">
+                    <div class="comparison-title">
+                        <span>📊 Comparaison des réponses</span>
+                    </div>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-column">
+                            <div class="column-header student-answer">
+                                <span>👤 Ta réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${String.fromCharCode(65 + reponseSelectionnee)}</strong> - ${reponseTexte}
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-column">
+                            <div class="column-header correct-answer">
+                                <span>✅ Bonne réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${String.fromCharCode(65 + bonneReponse)}</strong> - ${bonneReponseTexte}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Justification de la bonne réponse</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>⭐ Auto-évaluation</span>
+                    </div>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">${valeurDefaut}</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="${valeurDefaut}" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        ${estCorrect 
+                            ? "🎉 Ta réponse est correcte ! Tu peux t'attribuer la note maximale." 
+                            : "💡 Tu peux t'attribuer des points en fonction de ta compréhension de la justification."}
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierVF(exerciceId, bonneReponse, explication, pointsMax) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            let reponseSelectionnee = null;
+            let reponseTexte = '';
+            
+            options.forEach(opt => {
+                if (opt.classList.contains('selected')) {
+                    reponseSelectionnee = opt.dataset.valeur === 'true';
+                    reponseTexte = reponseSelectionnee ? 'Vrai' : 'Faux';
+                }
+            });
+
+            if (reponseSelectionnee === null) {
+                alert('Sélectionne Vrai ou Faux !');
+                return;
+            }
+
+            const estCorrect = reponseSelectionnee === bonneReponse;
+            const valeurDefaut = estCorrect ? pointsMax : 0;
+
+            // Marquer visuellement les réponses
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+            
+            options.forEach(opt => {
+                if ((opt.dataset.valeur === 'true' && bonneReponse) || 
+                    (opt.dataset.valeur === 'false' && !bonneReponse)) {
+                    opt.classList.add('correct');
+                }
+            });
+
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            comparisonDiv.innerHTML = `
+                <div class="comparison-section">
+                    <div class="comparison-title">
+                        <span>📊 Comparaison des réponses</span>
+                    </div>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-column">
+                            <div class="column-header student-answer">
+                                <span>👤 Ta réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${reponseTexte}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-column">
+                            <div class="column-header correct-answer">
+                                <span>✅ Bonne réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${bonneReponse ? 'Vrai' : 'Faux'}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Justification de la bonne réponse</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>⭐ Auto-évaluation</span>
+                    </div>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">${valeurDefaut}</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="${valeurDefaut}" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        ${estCorrect 
+                            ? "🎉 Ta réponse est correcte ! Tu peux t'attribuer la note maximale." 
+                            : "💡 Maintenant que tu connais la bonne réponse, combien de points penses-tu mériter ?"}
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierEvaluation(exerciceId, elementsAttendus, explication, pointsMax) {
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            
+            let criteresHtml = '';
+            elementsAttendus.forEach((element, index) => {
+                criteresHtml += `
+                    <li class="criteria-item" onclick="toggleCriteria('${exerciceId}', ${index})">
+                        <span class="criteria-checkbox" id="criteria-${exerciceId}-${index}">✓</span>
+                        ${element}
+                    </li>
+                `;
+            });
+
+            comparisonDiv.innerHTML = `
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Explication et attentes</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                        <p style="margin-top: 10px;"><strong>Éléments attendus :</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${elementsAttendus.map(el => `<li>${el}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>✅ Éléments que tu as inclus</span>
+                    </div>
+                    
+                    <ul class="criteria-list" id="criteria-list-${exerciceId}">
+                        ${criteresHtml}
+                    </ul>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">0</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="0" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        💡 Coche les éléments que tu as mentionnés, puis ajuste le curseur pour te donner une note.
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierTraditionnelle(exerciceId, motsCles, explication, pointsMax) {
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            
+            let criteresHtml = '';
+            motsCles.forEach((mot, index) => {
+                criteresHtml += `
+                    <li class="criteria-item" onclick="toggleCriteria('${exerciceId}', ${index})">
+                        <span class="criteria-checkbox" id="criteria-${exerciceId}-${index}">✓</span>
+                        ${mot}
+                    </li>
+                `;
+            });
+
+            comparisonDiv.innerHTML = `
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Explication et mots-clés</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                        <p style="margin-top: 10px;"><strong>Mots-clés importants :</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${motsCles.map(mot => `<li>${mot}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>🔑 Mots-clés utilisés</span>
+                    </div>
+                    
+                    <ul class="criteria-list" id="criteria-list-${exerciceId}">
+                        ${criteresHtml}
+                    </ul>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">0</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="0" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        💡 Coche les mots-clés que tu as utilisés, puis ajuste le curseur pour te donner une note.
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function updateSliderValue(exerciceId) {
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const valueDisplay = document.getElementById(`slider-value-${exerciceId}`);
+            if (slider && valueDisplay) {
+                valueDisplay.textContent = slider.value;
+            }
+        }
+
+        function toggleCriteria(exerciceId, index) {
+            const checkbox = document.getElementById(`criteria-${exerciceId}-${index}`);
+            const item = checkbox.parentElement;
+            
+            item.classList.toggle('selected');
+            
+            const selectedItems = document.querySelectorAll(`#criteria-list-${exerciceId} .criteria-item.selected`);
+            const totalItems = document.querySelectorAll(`#criteria-list-${exerciceId} .criteria-item`).length;
+            
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const pointsMax = parseFloat(slider.max);
+            const pourcentage = totalItems > 0 ? selectedItems.length / totalItems : 0;
+            const valeur = Math.round(pourcentage * pointsMax * 2) / 2;
+            
+            slider.value = valeur;
+            updateSliderValue(exerciceId);
+        }
+
+        function attribuerPoints(exerciceId, pointsMax) {
+            if (eleve.exercicesValides.includes(exerciceId)) {
+                alert('Tu as déjà validé cet exercice !');
+                return;
+            }
+            
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const pointsObtenus = parseFloat(slider.value);
+            
+            if (confirm(`Tu t'attribues ${pointsObtenus} point${pointsObtenus > 1 ? 's' : ''} sur ${pointsMax}. Es-tu d'accord ?`)) {
+                eleve.points += pointsObtenus;
+                eleve.exercicesValides.push(exerciceId);
+                sauvegarderProgression();
+                mettreAJourAffichageEleve();
+                
+                const compareBtn = document.getElementById(`compare-${exerciceId}`);
+                if (compareBtn) {
+                    compareBtn.disabled = true;
+                }
+                
+                alert(`✅ ${pointsObtenus} point${pointsObtenus > 1 ? 's' : ''} ajouté${pointsObtenus > 1 ? 's' : ''} à ton score !`);
+            }
+        }
+
+        // ==================== FONCTION RETOUR ====================
+        function retourAccueil() {
+            // Redirige vers une page d'accueil ou recharge la page
+            if (confirm("Retourner à l'accueil ? Ta progression sera conservée.")) {
+                // Option 1: Recharger la page (simule un retour)
+                location.reload();
+                // Option 2: Rediriger vers une autre page (à décommenter si besoin)
+                // window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+</html>

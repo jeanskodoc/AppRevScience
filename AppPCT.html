@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Physique-Chimie & Technologie - Collège</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3b5e 0%, #164a5f 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0a2f44;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        /* Modal d'inscription */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal h2 {
+            color: #0a2f44;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 20px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .modal input:focus {
+            border-color: #0a2f44;
+        }
+
+        .modal button {
+            background: linear-gradient(135deg, #0a2f44 0%, #125d7a 100%);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(10, 47, 68, 0.4);
+        }
+
+        /* Header avec infos élève */
+        .student-header {
+            background: linear-gradient(135deg, #e6f0f5 0%, #cde3ed 100%);
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0a2f44 0%, #125d7a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .student-details h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .student-details p {
+            color: #666;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            background: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #0a2f44;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+        }
+
+        /* Indicateur de trimestre */
+        .trimestre-indicator {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        /* Bouton retour */
+        .back-button-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateX(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+        }
+
+        /* Filtres et contrôles */
+        .filters-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .filters-title {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filters-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        select, .action-btn {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: #0a2f44;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #0a2f44 0%, #125d7a 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 160px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(10, 47, 68, 0.4);
+        }
+
+        .reset-btn {
+            background: #ff9800;
+        }
+
+        .reset-btn:hover {
+            background: #f57c00;
+        }
+
+        /* Navigation des questions */
+        .question-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn {
+            background: #0a2f44;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #125d7a;
+            transform: translateX(-3px);
+        }
+
+        .nav-btn.next:hover:not(:disabled) {
+            transform: translateX(3px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .counter-badge {
+            background: #e9ecef;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #0a2f44;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0a2f44, #125d7a);
+            transition: width 0.3s ease;
+        }
+
+        /* Cartes d'exercices */
+        .exercises-container {
+            min-height: 400px;
+            margin: 25px 0;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border-left: 6px solid #0a2f44;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+            transition: transform 0.3s;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .badge-type {
+            background: linear-gradient(135deg, #0a2f44 0%, #125d7a 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-level {
+            background: #ffc107;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-trimestre {
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: #2d3748;
+            font-weight: 500;
+            padding: 10px 0;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .option-item {
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item:hover {
+            background: #d4e4f0;
+            border-color: #0a2f44;
+            transform: translateX(5px);
+        }
+
+        .option-item.selected {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+
+        .option-item.correct {
+            background: #a5d6a7;
+            border: 2px solid #4caf50;
+            font-weight: 500;
+        }
+
+        .option-item.incorrect {
+            background: #ffcdd2;
+            border: 2px solid #f44336;
+            font-weight: 500;
+        }
+
+        .option-prefix {
+            width: 28px;
+            height: 28px;
+            background: #0a2f44;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Section de comparaison et justification */
+        .comparison-section {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+            animation: slideDown 0.4s ease;
+        }
+
+        .comparison-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #f57c00;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-column {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .column-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .student-answer {
+            color: #0a2f44;
+        }
+
+        .correct-answer {
+            color: #4caf50;
+        }
+
+        .answer-content {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+
+        .justification-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+            animation: slideDown 0.4s ease;
+        }
+
+        .justification-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4caf50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .justification-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.6;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .justification-content p {
+            margin-bottom: 10px;
+        }
+
+        .justification-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .justification-content li {
+            margin: 5px 0;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .appreciation-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .appreciation-title {
+            font-weight: bold;
+            color: #0a2f44;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .criteria-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .criteria-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .criteria-item.selected {
+            background: #c8e6c9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .criteria-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .criteria-item.selected .criteria-checkbox {
+            background: #4caf50;
+            content: "✓";
+        }
+
+        .score-slider {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .slider-value {
+            color: #0a2f44;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #4caf50, #ffc107, #f44336);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #0a2f44;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .award-points-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .award-points-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .award-points-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .analysis-section {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #0a2f44;
+        }
+
+        .analysis-section.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .answer-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #4caf50;
+        }
+
+        .answer-section.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .result-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .result-correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .result-incorrect {
+            background: #ffcdd2;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .points-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn-primary, .btn-secondary, .btn-analyse {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: #0a2f44;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #125d7a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(10, 47, 68, 0.4);
+        }
+
+        .btn-analyse {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-analyse:hover:not(:disabled) {
+            background: #f57c00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-primary:disabled, .btn-secondary:disabled, .btn-analyse:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .no-exercises {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 1.1em;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .filters-grid {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .student-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .student-info {
+                flex-direction: column;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal d'inscription -->
+    <div id="inscriptionModal" class="modal active">
+        <div class="modal-content">
+            <h2>⚛️ Bienvenue en Physique-Chimie & Technologie !</h2>
+            <p>Pour commencer à réviser, quel est ton prénom ?</p>
+            <input type="text" id="studentNameInput" placeholder="Entre ton prénom..." autofocus>
+            <button onclick="inscrireEleve()">C'est parti !</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent" style="display: none;">
+        <!-- Bouton retour -->
+        <div class="back-button-container">
+            <button class="back-btn" onclick="retourAccueil()">
+                <span>←</span> Retour à l'accueil
+            </button>
+        </div>
+
+        <!-- Header avec infos élève -->
+        <div class="student-header">
+            <div class="student-info">
+                <div class="student-avatar" id="studentAvatar"></div>
+                <div class="student-details">
+                    <h3 id="studentName"></h3>
+                    <p>
+                        <span>📚 Classe : <span id="studentClass"></span></span>
+                        <span class="stars" id="starsDisplay">☆☆☆☆☆</span>
+                    </p>
+                </div>
+            </div>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value" id="scoreDisplay">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="exercisesDone">0</div>
+                    <div class="stat-label">/20</div>
+                </div>
+                <button class="reset-btn action-btn" onclick="reinitialiserProgression()" style="padding: 8px 15px;" title="Réinitialiser ma progression">
+                    ⟲
+                </button>
+            </div>
+        </div>
+
+        <h1>
+            <span>⚛️🔧 Révision Physique-Chimie & Technologie</span>
+        </h1>
+        <div class="subtitle">Collège - 10 questions par série (20 points)</div>
+
+        <!-- Filtres -->
+        <div class="filters-section">
+            <div class="filters-title">
+                <span>⚙️</span> Filtres de révision
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Niveau</label>
+                    <select id="niveau" onchange="changerClasse()">
+                        <option value="6eme">6ème</option>
+                        <option value="5eme">5ème</option>
+                        <option value="4eme">4ème</option>
+                        <option value="3eme">3ème</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Type d'exercice</label>
+                    <select id="typeExercice">
+                        <option value="qcm">QCM (2 pts)</option>
+                        <option value="evaluation">Situation d'évaluation (2 pts)</option>
+                        <option value="vf">Vrai ou Faux (2 pts)</option>
+                        <option value="traditionnelle">Question ouverte (2 pts)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Trimestre</label>
+                    <select id="trimestre" onchange="changerTrimestre()">
+                        <option value="1">Trimestre 1</option>
+                        <option value="2">Trimestre 2</option>
+                        <option value="3">Trimestre 3</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label> </label>
+                    <button class="action-btn" onclick="genererNouvelleSerie()">
+                        <span>🎲</span> Nouvelle série
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de progression -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <!-- Navigation des questions -->
+        <div class="question-nav">
+            <button class="nav-btn" id="prevBtn" onclick="changerQuestion('prev')" disabled>
+                ← Précédent
+            </button>
+            <span class="counter-badge" id="questionCounter">
+                Question <span id="currentQuestion">1</span>/<span id="totalQuestions">10</span>
+                <span class="trimestre-indicator" id="trimestreDisplay">T1</span>
+            </span>
+            <button class="nav-btn next" id="nextBtn" onclick="changerQuestion('next')">
+                Suivant →
+            </button>
+        </div>
+
+        <div id="exercicesList" class="exercises-container">
+            <!-- Les exercices seront générés ici -->
+        </div>
+
+        <div class="footer">
+            <p>✨ Application de révision Physique-Chimie & Technologie - Collège ✨</p>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DONNÉES COMPLÈTES ====================
+        const exercicesPC = {
+            qcm: {
+                theme: "QCM",
+                points: 2,
+                questions: [
+                    // 6ème - T1 (Physique - états de l'eau)
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Quels sont les trois états de l'eau ?",
+                        options: ["Solide, liquide, gazeux", "Chaud, froid, tiède", "Lourd, léger, moyen", "Salé, doux, minéral"],
+                        reponse: 0,
+                        explication: "L'eau existe sous trois états : solide (glace), liquide (eau courante), gazeux (vapeur d'eau)."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "À quelle température l'eau bout-elle à pression normale ?",
+                        options: ["50°C", "100°C", "0°C", "212°C"],
+                        reponse: 1,
+                        explication: "L'eau pure bout à 100°C au niveau de la mer."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "La fusion de la glace se produit à :",
+                        options: ["0°C", "100°C", "-10°C", "50°C"],
+                        reponse: 0,
+                        explication: "La fusion (passage de solide à liquide) de la glace a lieu à 0°C."
+                    },
+                    // 6ème - T2 (Technologie - objets techniques)
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce qu'un objet technique ?",
+                        options: ["Un objet naturel", "Un objet modifié ou créé par l'homme", "Un objet qui n'a pas de fonction", "Un objet trouvé dans la nature"],
+                        reponse: 1,
+                        explication: "Un objet technique est fabriqué ou transformé par l'homme pour répondre à un besoin."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Quelle est la fonction d'usage d'un vélo ?",
+                        options: ["Se déplacer", "Décorer", "Faire du bruit", "Vendre"],
+                        reponse: 0,
+                        explication: "La fonction d'usage répond à : à quoi sert l'objet ? Le vélo sert à se déplacer."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Un matériau isolant électrique :",
+                        options: ["Laisse passer le courant", "Ne laisse pas passer le courant", "Attire le courant", "Produit du courant"],
+                        reponse: 1,
+                        explication: "Un isolant électrique (plastique, bois sec) ne conduit pas le courant électrique."
+                    },
+                    // 6ème - T3 (Technologie - matériaux)
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Le bois est un matériau :",
+                        options: ["Naturel", "Synthétique", "Métallique", "Céramique"],
+                        reponse: 0,
+                        explication: "Le bois est un matériau naturel d'origine végétale."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Le plastique est fabriqué à partir de :",
+                        options: ["Pétrole", "Sable", "Bois", "Métal"],
+                        reponse: 0,
+                        explication: "La plupart des plastiques sont issus du pétrole, ce sont des matériaux synthétiques."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Propriété de l'aluminium :",
+                        options: ["Lourd et cassant", "Léger et conducteur", "Isolant thermique", "Transparent"],
+                        reponse: 1,
+                        explication: "L'aluminium est léger, malléable et bon conducteur thermique/électrique."
+                    },
+                    // 5ème - T1 (Chimie - mélanges)
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Un mélange homogène :",
+                        options: ["On distingue plusieurs constituants", "On ne distingue qu'une seule phase", "C'est toujours de l'eau", "C'est un solide"],
+                        reponse: 1,
+                        explication: "Un mélange homogène a une apparence uniforme (ex: eau salée)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "L'eau du robinet est :",
+                        options: ["Un corps pur", "Un mélange homogène", "Un mélange hétérogène", "Un élément chimique"],
+                        reponse: 1,
+                        explication: "L'eau du robinet contient des sels minéraux dissous, c'est un mélange homogène."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Décantation et filtration permettent de séparer :",
+                        options: ["Mélange homogène", "Mélange hétérogène", "Gaz", "Électrons"],
+                        reponse: 1,
+                        explication: "Ces techniques séparent les constituants d'un mélange hétérogène."
+                    },
+                    // 5ème - T2 (Physique - électricité)
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Dans un circuit en série, si une lampe grille, les autres :",
+                        options: ["S'éteignent", "Brillent plus", "Brillent moins", "Rien ne change"],
+                        reponse: 0,
+                        explication: "Dans un circuit série, le courant est interrompu."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Dans un circuit en dérivation, si une lampe grille, les autres :",
+                        options: ["S'éteignent", "Fonctionnent normalement", "Brillent plus", "Clignotent"],
+                        reponse: 1,
+                        explication: "En dérivation, chaque lampe est indépendante."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Le symbole électrique d'une pile est :",
+                        options: ["-|-", "-o-", "-M-", "-L-"],
+                        reponse: 0,
+                        explication: "Le symbole normalisé est un trait long (+) et un trait court (-)."
+                    },
+                    // 5ème - T3 (Technologie - transmission mouvement)
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Un engrenage permet de :",
+                        options: ["Transformer l'énergie", "Transmettre un mouvement", "Stocker l'énergie", "Créer de l'électricité"],
+                        reponse: 1,
+                        explication: "Les engrenages transmettent et adaptent un mouvement de rotation."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Dans un vélo, la chaîne et les pédales forment :",
+                        options: ["Un système de freinage", "Une transmission de mouvement", "Un éclairage", "Une suspension"],
+                        reponse: 1,
+                        explication: "Le pédalier transmet le mouvement à la roue arrière par la chaîne."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Une poulie est utilisée pour :",
+                        options: ["Changer la vitesse", "Soulever des charges", "Produire du courant", "Freiner"],
+                        reponse: 1,
+                        explication: "Les poulies permettent de soulever des charges ou de transmettre un mouvement."
+                    },
+                    // 4ème - T1 (Chimie - atomes, molécules)
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "L'atome est constitué :",
+                        options: ["De noyau et d'électrons", "De molécules", "De vide uniquement", "De cellules"],
+                        reponse: 0,
+                        explication: "Un atome a un noyau central (protons+neutrons) et des électrons en mouvement autour."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "La molécule d'eau est :",
+                        options: ["H2O", "CO2", "O2", "NaCl"],
+                        reponse: 0,
+                        explication: "H2O : deux atomes d'hydrogène et un atome d'oxygène."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "L'air est un mélange de :",
+                        options: ["O2 et N2 surtout", "CO2 et H2O", "He et Ne", "Ar et CO2"],
+                        reponse: 0,
+                        explication: "L'air contient environ 78% de diazote (N2) et 21% de dioxygène (O2)."
+                    },
+                    // 4ème - T2 (Physique - tension/intensité)
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "L'unité de tension électrique est :",
+                        options: ["L'ampère (A)", "Le volt (V)", "L'ohm (Ω)", "Le watt (W)"],
+                        reponse: 1,
+                        explication: "La tension se mesure en volts."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "L'intensité se mesure avec :",
+                        options: ["Un voltmètre en dérivation", "Un ampèremètre en série", "Un ohmmètre", "Un wattmètre"],
+                        reponse: 1,
+                        explication: "L'ampèremètre se branche en série."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "La loi d'Ohm relie :",
+                        options: ["U = R × I", "P = U × I", "E = m c²", "F = m a"],
+                        reponse: 0,
+                        explication: "U (tension) = R (résistance) × I (intensité)."
+                    },
+                    // 4ème - T3 (Technologie - automatismes)
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Un capteur de température convertit :",
+                        options: ["Chaleur en signal électrique", "Lumière en son", "Mouvement en énergie", "Pression en déplacement"],
+                        reponse: 0,
+                        explication: "Un capteur transforme une grandeur physique en signal électrique exploitable."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Un actionneur peut être :",
+                        options: ["Un moteur", "Une thermistance", "Un interrupteur", "Un bouton poussoir"],
+                        reponse: 0,
+                        explication: "Un actionneur produit un effet (mouvement, lumière)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Dans un système automatisé, la partie commande :",
+                        options: ["Traite les informations", "Agit sur la matière", "Capte les données", "Alimente en énergie"],
+                        reponse: 0,
+                        explication: "La partie commande traite les signaux reçus des capteurs."
+                    },
+                    // 3ème - T1 (Chimie - ions, pH)
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Une solution acide a un pH :",
+                        options: ["< 7", "= 7", "> 7", "Toujours 0"],
+                        reponse: 0,
+                        explication: "pH < 7 : acide ; pH = 7 : neutre ; pH > 7 : basique."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "L'ion chlorure a pour formule :",
+                        options: ["Cl-", "Cl+", "Cl2", "Na+"],
+                        reponse: 0,
+                        explication: "L'ion chlorure est Cl⁻ (atome de chlore ayant gagné un électron)."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Lors d'une réaction acide-base, il se forme :",
+                        options: ["De l'eau et un sel", "Du dioxyde de carbone", "Un métal", "De l'oxygène"],
+                        reponse: 0,
+                        explication: "C'est une réaction de neutralisation : acide + base → eau + sel."
+                    },
+                    // 3ème - T2 (Physique - énergie, puissance)
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "L'unité d'énergie dans le système international est :",
+                        options: ["Le Joule (J)", "Le Watt (W)", "Le Volt (V)", "L'ampère (A)"],
+                        reponse: 0,
+                        explication: "L'énergie se mesure en joules. La puissance en watts (1 W = 1 J/s)."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Une ampoule de 20 W consomme en 2h :",
+                        options: ["40 Wh", "10 Wh", "20 J", "40 J"],
+                        reponse: 0,
+                        explication: "Énergie = Puissance × temps = 20 W × 2 h = 40 Wh."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "L'énergie cinétique dépend de :",
+                        options: ["Masse et vitesse", "Masse et hauteur", "Vitesse seule", "Température"],
+                        reponse: 0,
+                        explication: "Ec = 1/2 × m × v²."
+                    },
+                    // 3ème - T3 (Technologie - innovation, design)
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Le cahier des charges fonctionnel exprime :",
+                        options: ["Les besoins et contraintes", "Le prix de revient", "Les plans détaillés", "La couleur de l'objet"],
+                        reponse: 0,
+                        explication: "Il décrit les fonctions et contraintes que le produit doit respecter."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "La démarche de projet commence par :",
+                        options: ["L'analyse du besoin", "La fabrication", "Les tests", "La commercialisation"],
+                        reponse: 0,
+                        explication: "On identifie d'abord le besoin auquel l'objet doit répondre."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Un prototype sert à :",
+                        options: ["Valider des choix", "Produire en série", "Vendre directement", "Étudier le marché"],
+                        reponse: 0,
+                        explication: "Le prototype permet de tester et valider les solutions techniques."
+                    }
+                ]
+            },
+            evaluation: {
+                theme: "Situation d'évaluation",
+                points: 2,
+                questions: [
+                    // 6ème
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Situation: Tu laisses un verre d'eau dehors en hiver, le lendemain il est fissuré. Explique pourquoi.",
+                        consigne: "Utilise les changements d'état pour expliquer ce phénomène.",
+                        elements_reponse: ["Eau liquide", "Gel", "Augmentation de volume", "Pression"],
+                        explication: "L'eau en gelant (passage de liquide à solide) augmente de volume. La pression exercée sur les parois du verre le fait éclater."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Situation: Tu veux construire une lampe torche. Quels éléments techniques sont nécessaires ?",
+                        consigne: "Cite au moins 4 éléments.",
+                        elements_reponse: ["Pile", "Lampe", "Interrupteur", "Fils conducteurs"],
+                        explication: "Il faut une source d'énergie (pile), un récepteur (lampe), un interrupteur pour commander, et des fils pour relier."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Situation: Tu dois choisir un matériau pour une coque de téléphone. Quelles propriétés rechercher ?",
+                        consigne: "Donne trois propriétés importantes.",
+                        elements_reponse: ["Résistant aux chocs", "Léger", "Isolant électrique"],
+                        explication: "On cherche un matériau résistant, léger, et isolant pour protéger le téléphone."
+                    },
+                    // 5ème
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Situation: Tu prépares de l'eau salée. Comment récupérer le sel après cuisson ?",
+                        consigne: "Propose une méthode simple.",
+                        elements_reponse: ["Évaporation", "Chauffage", "Cristaux de sel"],
+                        explication: "En chauffant, l'eau s'évapore et le sel reste au fond sous forme de cristaux."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Situation: Une lampe ne brille pas dans un circuit. Propose trois vérifications.",
+                        consigne: "Cite les éléments à contrôler.",
+                        elements_reponse: ["Pile usée", "Lampe grillée", "Mauvais contact", "Interrupteur ouvert"],
+                        explication: "Vérifier la pile, la lampe, les connexions, l'interrupteur."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Situation: Pour soulever une lourde caisse, tu utilises un levier. Explique pourquoi.",
+                        consigne: "Utilise le principe du levier.",
+                        elements_reponse: ["Point d'appui", "Force", "Distance", "Démultiplication"],
+                        explication: "Le levier permet de démultiplier la force : en appuyant plus loin, on soulève plus lourd."
+                    },
+                    // 4ème
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Situation: On veut éteindre un feu d'huile. Pourquoi ne pas utiliser de l'eau ?",
+                        consigne: "Explique le danger.",
+                        elements_reponse: ["Huile brûlante", "Eau vaporisée", "Projection", "Augmentation du feu"],
+                        explication: "L'eau vaporisée projette l'huile enflammée, ce qui aggrave le feu."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Situation: Un radiateur électrique chauffe moins qu'avant. Quelle peut être la cause ?",
+                        consigne: "Donne deux explications.",
+                        elements_reponse: ["Résistance usée", "Tension plus faible"],
+                        explication: "Une résistance qui fatigue chauffe moins, ou la tension d'alimentation peut être plus faible."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Situation: L'éclairage s'allume automatiquement la nuit. Décris les composants.",
+                        consigne: "Cite les éléments et leur rôle.",
+                        elements_reponse: ["Capteur crépusculaire", "Lampe", "Relais"],
+                        explication: "Le capteur détecte l'obscurité et commande l'allumage de la lampe via un relais."
+                    },
+                    // 3ème
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Situation: Tu mélanges du vinaigre et du bicarbonate. Une effervescence se produit. Explique.",
+                        consigne: "Identifie le gaz produit et le type de réaction.",
+                        elements_reponse: ["Réaction acide-base", "Neutralisation", "CO2", "Effervescence"],
+                        explication: "C'est une réaction acide-base (neutralisation) qui produit du dioxyde de carbone."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Situation: Une voiture freine brusquement. Que devient son énergie cinétique ?",
+                        consigne: "Explique la transformation d'énergie.",
+                        elements_reponse: ["Énergie cinétique", "Freins", "Chaleur"],
+                        explication: "L'énergie cinétique est convertie en chaleur par les freins."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Situation: Propose un objet qui économise l'énergie à la maison.",
+                        consigne: "Décris son principe.",
+                        elements_reponse: ["Détecteur de présence", "Ampoule LED", "Thermostat"],
+                        explication: "Un détecteur de présence éteint la lumière automatiquement quand la pièce est vide."
+                    }
+                ]
+            },
+            vf: {
+                theme: "Vrai ou Faux",
+                points: 2,
+                questions: [
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "L'eau bout toujours à 100°C.",
+                        reponse: false,
+                        explication: "Faux. La température d'ébullition dépend de la pression. En altitude, elle est plus basse."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Le bois est un conducteur électrique.",
+                        reponse: false,
+                        explication: "Faux. Le bois sec est un isolant électrique."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Le plastique est un matériau synthétique fabriqué à partir de pétrole.",
+                        reponse: true,
+                        explication: "Vrai. La plupart des plastiques sont issus de la pétrochimie."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Le sucre se dissout totalement dans l'eau.",
+                        reponse: true,
+                        explication: "Vrai. Le sucre est soluble dans l'eau."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Dans un circuit en série, l'intensité est la même partout.",
+                        reponse: true,
+                        explication: "Vrai. C'est une propriété du circuit série."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Un levier ne peut pas démultiplier la force.",
+                        reponse: false,
+                        explication: "Faux. Un levier permet d'obtenir une force plus grande."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "L'atome est invisible à l'œil nu.",
+                        reponse: true,
+                        explication: "Vrai. L'atome est infiniment petit."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "L'intensité se mesure avec un voltmètre.",
+                        reponse: false,
+                        explication: "Faux. L'intensité se mesure avec un ampèremètre."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Un capteur convertit une grandeur physique en signal électrique.",
+                        reponse: true,
+                        explication: "Vrai. C'est la fonction d'un capteur."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Un ion est un atome qui a gagné ou perdu des électrons.",
+                        reponse: true,
+                        explication: "Vrai. Un ion est chargé électriquement."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "L'énergie cinétique est nulle quand un objet est immobile.",
+                        reponse: true,
+                        explication: "Vrai. Ec = 1/2 m v², si v=0 alors Ec=0."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Le cahier des charges décrit les solutions techniques détaillées.",
+                        reponse: false,
+                        explication: "Faux. Il décrit les besoins et contraintes, pas les solutions."
+                    }
+                ]
+            },
+            traditionnelle: {
+                theme: "Question ouverte",
+                points: 2,
+                questions: [
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Explique le cycle de l'eau dans la nature.",
+                        mots_cles: ["Évaporation", "Condensation", "Précipitations", "Ruissellement"],
+                        explication: "L'eau s'évapore, se condense en nuages, retombe en pluie, puis ruisselle vers les mers."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Différence entre conducteur et isolant ? Donne des exemples.",
+                        mots_cles: ["Conducteur", "Isolant", "Cuivre", "Plastique"],
+                        explication: "Un conducteur laisse passer le courant (cuivre), un isolant non (plastique)."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Cite trois propriétés des matériaux et un exemple pour chacune.",
+                        mots_cles: ["Résistance", "Conductivité", "Masse"],
+                        explication: "Résistance (acier), conductivité (cuivre), légèreté (aluminium)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Différence entre mélange homogène et hétérogène ? Exemples.",
+                        mots_cles: ["Homogène", "Hétérogène", "Eau salée", "Eau + huile"],
+                        explication: "Homogène : une seule phase (eau salée). Hétérogène : plusieurs phases (eau+huile)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Différence entre circuit série et dérivation.",
+                        mots_cles: ["Série", "Dérivation", "Courant", "Tension"],
+                        explication: "Série : même courant. Dérivation : même tension, indépendance."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Explique le principe du levier. Exemple.",
+                        mots_cles: ["Point d'appui", "Force", "Charge"],
+                        explication: "Le levier permet de multiplier la force grâce à un point d'appui."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Décris la structure d'un atome.",
+                        mots_cles: ["Noyau", "Protons", "Neutrons", "Électrons"],
+                        explication: "Atome = noyau (protons+neutrons) + électrons en mouvement."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Qu'est-ce que la loi d'Ohm ? Formule ?",
+                        mots_cles: ["Tension", "Résistance", "Intensité", "U = R × I"],
+                        explication: "U (tension) = R (résistance) × I (intensité)."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Rôle d'un capteur et d'un actionneur ? Exemple.",
+                        mots_cles: ["Capteur", "Mesure", "Actionneur", "Moteur"],
+                        explication: "Le capteur mesure, l'actionneur agit (ex: moteur)."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Différence entre atome et ion ?",
+                        mots_cles: ["Charge", "Électrons", "Cation", "Anion"],
+                        explication: "Un ion est un atome qui a gagné ou perdu des électrons, il est chargé."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Différence entre énergie cinétique et potentielle ?",
+                        mots_cles: ["Mouvement", "Vitesse", "Position", "Hauteur"],
+                        explication: "Cinétique : liée au mouvement. Potentielle : liée à la hauteur."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "Décris les étapes de la démarche de projet.",
+                        mots_cles: ["Besoin", "Cahier des charges", "Prototype", "Tests"],
+                        explication: "1. Analyse du besoin, 2. Cahier des charges, 3. Conception, 4. Prototype, 5. Tests."
+                    }
+                ]
+            }
+        };
+
+        // ==================== ÉTAT GLOBAL ====================
+        let eleve = {
+            nom: '',
+            classe: '6eme',
+            points: 0,
+            exercicesValides: [],
+            exercicesTotal: 0
+        };
+
+        let exercicesActuels = [];
+        let questionActuelle = 0;
+        let reponsesUtilisateur = {};
+
+        // ==================== FONCTIONS PRINCIPALES ====================
+        function inscrireEleve() {
+            const nom = document.getElementById('studentNameInput').value.trim();
+            if (nom === '') {
+                alert('Veuillez entrer ton prénom pour continuer !');
+                return;
+            }
+
+            eleve.nom = nom;
+            document.getElementById('inscriptionModal').classList.remove('active');
+            document.getElementById('mainContent').style.display = 'block';
+            
+            mettreAJourAffichageEleve();
+            chargerProgression();
+            genererNouvelleSerie();
+        }
+
+        function mettreAJourAffichageEleve() {
+            document.getElementById('studentAvatar').textContent = eleve.nom.charAt(0).toUpperCase();
+            document.getElementById('studentName').textContent = eleve.nom;
+            document.getElementById('studentClass').textContent = eleve.classe;
+            document.getElementById('scoreDisplay').textContent = eleve.points;
+            document.getElementById('exercisesDone').textContent = eleve.exercicesValides.length;
+            
+            const etoiles = Math.min(5, Math.floor(eleve.points / 5));
+            document.getElementById('starsDisplay').textContent = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
+        }
+
+        function changerClasse() {
+            eleve.classe = document.getElementById('niveau').value;
+            mettreAJourAffichageEleve();
+            sauvegarderProgression();
+            genererNouvelleSerie();
+        }
+
+        function changerTrimestre() {
+            genererNouvelleSerie();
+        }
+
+        function sauvegarderProgression() {
+            localStorage.setItem('elevePC', JSON.stringify(eleve));
+        }
+
+        function chargerProgression() {
+            const saved = localStorage.getItem('elevePC');
+            if (saved) {
+                const savedEleve = JSON.parse(saved);
+                if (savedEleve.nom === eleve.nom) {
+                    eleve = savedEleve;
+                    document.getElementById('niveau').value = eleve.classe;
+                    mettreAJourAffichageEleve();
+                }
+            }
+        }
+
+        function reinitialiserProgression() {
+            if (confirm('Es-tu sûr de vouloir réinitialiser ta progression ?')) {
+                eleve.points = 0;
+                eleve.exercicesValides = [];
+                eleve.exercicesTotal = 0;
+                sauvegarderProgression();
+                mettreAJourAffichageEleve();
+                genererNouvelleSerie();
+            }
+        }
+
+        function genererNouvelleSerie() {
+            const niveau = document.getElementById('niveau').value;
+            const type = document.getElementById('typeExercice').value;
+            const trimestre = parseInt(document.getElementById('trimestre').value);
+            
+            const exercicesFiltres = exercicesPC[type].questions.filter(ex => 
+                ex.niveau === niveau && ex.trimestre === trimestre
+            );
+
+            if (exercicesFiltres.length === 0) {
+                document.getElementById('exercicesList').innerHTML = '<div class="no-exercises">📭 Aucun exercice disponible pour ce trimestre</div>';
+                return;
+            }
+
+            // Prendre 10 questions maximum
+            exercicesActuels = exercicesFiltres
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 10);
+
+            questionActuelle = 0;
+            reponsesUtilisateur = {};
+            afficherQuestion(questionActuelle);
+            mettreAJourNavigation();
+            
+            document.getElementById('trimestreDisplay').textContent = `T${trimestre}`;
+            document.getElementById('totalQuestions').textContent = exercicesActuels.length;
+        }
+
+        function afficherQuestion(index) {
+            if (!exercicesActuels.length || index < 0 || index >= exercicesActuels.length) return;
+
+            const container = document.getElementById('exercicesList');
+            const ex = exercicesActuels[index];
+            const type = document.getElementById('typeExercice').value;
+            const points = exercicesPC[type].points;
+            
+            const exerciceId = `${type}_${Date.now()}_${index}`;
+            const dejaValide = eleve.exercicesValides.includes(exerciceId);
+            
+            let contenu = `
+                <div class="exercise-card" data-exercice-id="${exerciceId}">
+                    <div class="card-header">
+                        <span class="badge-type">${exercicesPC[type].theme}</span>
+                        <span class="badge-level">${ex.niveau}</span>
+                        <span class="badge-trimestre">Trimestre ${ex.trimestre}</span>
+                    </div>
+            `;
+
+            if (type === 'qcm') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    <ul class="options-list" id="options-${exerciceId}">
+                        ${ex.options.map((opt, i) => `
+                            <li class="option-item" onclick="selectionnerReponse('${exerciceId}', ${i})">
+                                <span class="option-prefix">${String.fromCharCode(65 + i)}</span>
+                                ${opt}
+                            </li>
+                        `).join('')}
+                    </ul>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" id="compare-${exerciceId}" onclick="comparerEtJustifierQCM('${exerciceId}', ${ex.reponse}, '${ex.explication.replace(/'/g, "\\'")}', ${points})" ${dejaValide ? 'disabled' : ''}>
+                            🔍 Comparer et voir la justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'evaluation') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    <p style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        <strong>📝 Consigne :</strong> ${ex.consigne}
+                    </p>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" onclick="comparerEtJustifierEvaluation('${exerciceId}', ${JSON.stringify(ex.elements_reponse)}, '${ex.explication.replace(/'/g, "\\'")}', ${points})">
+                            🔍 Auto-évaluation avec justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'vf') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    
+                    <div class="options-list" id="options-${exerciceId}">
+                        <li class="option-item" onclick="selectionnerVF('${exerciceId}', true)">
+                            <span class="option-prefix">V</span>
+                            Vrai
+                        </li>
+                        <li class="option-item" onclick="selectionnerVF('${exerciceId}', false)">
+                            <span class="option-prefix">F</span>
+                            Faux
+                        </li>
+                    </div>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" id="compare-${exerciceId}" onclick="comparerEtJustifierVF('${exerciceId}', ${ex.reponse}, '${ex.explication.replace(/'/g, "\\'")}', ${points})" ${dejaValide ? 'disabled' : ''}>
+                            🔍 Comparer et voir la justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'traditionnelle') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" onclick="comparerEtJustifierTraditionnelle('${exerciceId}', ${JSON.stringify(ex.mots_cles)}, '${ex.explication.replace(/'/g, "\\'")}', ${points})">
+                            🔍 Auto-évaluation avec justification
+                        </button>
+                    </div>
+                `;
+            }
+
+            contenu += `</div>`;
+            container.innerHTML = contenu;
+            
+            document.getElementById('currentQuestion').textContent = index + 1;
+            document.getElementById('totalQuestions').textContent = exercicesActuels.length;
+            
+            const progression = ((index + 1) / exercicesActuels.length) * 100;
+            document.getElementById('progressFill').style.width = `${progression}%`;
+        }
+
+        function changerQuestion(direction) {
+            if (direction === 'prev' && questionActuelle > 0) {
+                questionActuelle--;
+            } else if (direction === 'next' && questionActuelle < exercicesActuels.length - 1) {
+                questionActuelle++;
+            }
+            
+            afficherQuestion(questionActuelle);
+            mettreAJourNavigation();
+        }
+
+        function mettreAJourNavigation() {
+            document.getElementById('prevBtn').disabled = questionActuelle === 0;
+            document.getElementById('nextBtn').disabled = questionActuelle === exercicesActuels.length - 1;
+        }
+
+        function selectionnerReponse(exerciceId, optionIndex) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            options[optionIndex].classList.add('selected');
+            
+            reponsesUtilisateur[exerciceId] = {
+                type: 'qcm',
+                reponse: optionIndex
+            };
+            
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            if (comparisonDiv) comparisonDiv.innerHTML = '';
+        }
+
+        function selectionnerVF(exerciceId, valeur) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            const clickedOption = event.currentTarget;
+            clickedOption.classList.add('selected');
+            clickedOption.dataset.valeur = valeur;
+            
+            reponsesUtilisateur[exerciceId] = {
+                type: 'vf',
+                reponse: valeur
+            };
+            
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            if (comparisonDiv) comparisonDiv.innerHTML = '';
+        }
+
+        function comparerEtJustifierQCM(exerciceId, bonneReponse, explication, pointsMax) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            let reponseSelectionnee = -1;
+            let reponseTexte = '';
+            
+            options.forEach((opt, index) => {
+                if (opt.classList.contains('selected')) {
+                    reponseSelectionnee = index;
+                    reponseTexte = opt.textContent.replace(/[A-D]/, '').trim();
+                }
+            });
+
+            if (reponseSelectionnee === -1) {
+                alert('Sélectionne d\'abord une réponse !');
+                return;
+            }
+
+            const ex = exercicesActuels[questionActuelle];
+            const bonneReponseTexte = ex.options[bonneReponse];
+            
+            options.forEach((opt, index) => {
+                opt.classList.remove('correct', 'incorrect');
+                if (index === bonneReponse) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            if (reponseSelectionnee === bonneReponse) {
+                options[reponseSelectionnee].classList.add('correct');
+            } else {
+                options[reponseSelectionnee].classList.add('incorrect');
+            }
+
+            const estCorrect = reponseSelectionnee === bonneReponse;
+            const valeurDefaut = estCorrect ? pointsMax : Math.floor(pointsMax / 2);
+
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            comparisonDiv.innerHTML = `
+                <div class="comparison-section">
+                    <div class="comparison-title">
+                        <span>📊 Comparaison des réponses</span>
+                    </div>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-column">
+                            <div class="column-header student-answer">
+                                <span>👤 Ta réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${String.fromCharCode(65 + reponseSelectionnee)}</strong> - ${reponseTexte}
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-column">
+                            <div class="column-header correct-answer">
+                                <span>✅ Bonne réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${String.fromCharCode(65 + bonneReponse)}</strong> - ${bonneReponseTexte}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Justification de la bonne réponse</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>⭐ Auto-évaluation</span>
+                    </div>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">${valeurDefaut}</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="${valeurDefaut}" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        ${estCorrect 
+                            ? "🎉 Ta réponse est correcte ! Tu peux t'attribuer la note maximale." 
+                            : "💡 Tu peux t'attribuer des points en fonction de ta compréhension de la justification."}
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierVF(exerciceId, bonneReponse, explication, pointsMax) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            let reponseSelectionnee = null;
+            let reponseTexte = '';
+            
+            options.forEach(opt => {
+                if (opt.classList.contains('selected')) {
+                    reponseSelectionnee = opt.dataset.valeur === 'true';
+                    reponseTexte = reponseSelectionnee ? 'Vrai' : 'Faux';
+                }
+            });
+
+            if (reponseSelectionnee === null) {
+                alert('Sélectionne Vrai ou Faux !');
+                return;
+            }
+
+            const estCorrect = reponseSelectionnee === bonneReponse;
+            const valeurDefaut = estCorrect ? pointsMax : 0;
+
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+            
+            options.forEach(opt => {
+                if ((opt.dataset.valeur === 'true' && bonneReponse) || 
+                    (opt.dataset.valeur === 'false' && !bonneReponse)) {
+                    opt.classList.add('correct');
+                }
+            });
+
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            comparisonDiv.innerHTML = `
+                <div class="comparison-section">
+                    <div class="comparison-title">
+                        <span>📊 Comparaison des réponses</span>
+                    </div>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-column">
+                            <div class="column-header student-answer">
+                                <span>👤 Ta réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${reponseTexte}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-column">
+                            <div class="column-header correct-answer">
+                                <span>✅ Bonne réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${bonneReponse ? 'Vrai' : 'Faux'}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Justification de la bonne réponse</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>⭐ Auto-évaluation</span>
+                    </div>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">${valeurDefaut}</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="${valeurDefaut}" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        ${estCorrect 
+                            ? "🎉 Ta réponse est correcte ! Tu peux t'attribuer la note maximale." 
+                            : "💡 Maintenant que tu connais la bonne réponse, combien de points penses-tu mériter ?"}
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierEvaluation(exerciceId, elementsAttendus, explication, pointsMax) {
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            
+            let criteresHtml = '';
+            elementsAttendus.forEach((element, index) => {
+                criteresHtml += `
+                    <li class="criteria-item" onclick="toggleCriteria('${exerciceId}', ${index})">
+                        <span class="criteria-checkbox" id="criteria-${exerciceId}-${index}">✓</span>
+                        ${element}
+                    </li>
+                `;
+            });
+
+            comparisonDiv.innerHTML = `
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Explication et attentes</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                        <p style="margin-top: 10px;"><strong>Éléments attendus :</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${elementsAttendus.map(el => `<li>${el}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>✅ Éléments que tu as inclus</span>
+                    </div>
+                    
+                    <ul class="criteria-list" id="criteria-list-${exerciceId}">
+                        ${criteresHtml}
+                    </ul>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">0</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="0" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        💡 Coche les éléments que tu as mentionnés, puis ajuste le curseur pour te donner une note.
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierTraditionnelle(exerciceId, motsCles, explication, pointsMax) {
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            
+            let criteresHtml = '';
+            motsCles.forEach((mot, index) => {
+                criteresHtml += `
+                    <li class="criteria-item" onclick="toggleCriteria('${exerciceId}', ${index})">
+                        <span class="criteria-checkbox" id="criteria-${exerciceId}-${index}">✓</span>
+                        ${mot}
+                    </li>
+                `;
+            });
+
+            comparisonDiv.innerHTML = `
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Explication et mots-clés</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                        <p style="margin-top: 10px;"><strong>Mots-clés importants :</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${motsCles.map(mot => `<li>${mot}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>🔑 Mots-clés utilisés</span>
+                    </div>
+                    
+                    <ul class="criteria-list" id="criteria-list-${exerciceId}">
+                        ${criteresHtml}
+                    </ul>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">0</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="0" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        💡 Coche les mots-clés que tu as utilisés, puis ajuste le curseur pour te donner une note.
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function updateSliderValue(exerciceId) {
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const valueDisplay = document.getElementById(`slider-value-${exerciceId}`);
+            if (slider && valueDisplay) {
+                valueDisplay.textContent = slider.value;
+            }
+        }
+
+        function toggleCriteria(exerciceId, index) {
+            const checkbox = document.getElementById(`criteria-${exerciceId}-${index}`);
+            const item = checkbox.parentElement;
+            
+            item.classList.toggle('selected');
+            
+            const selectedItems = document.querySelectorAll(`#criteria-list-${exerciceId} .criteria-item.selected`);
+            const totalItems = document.querySelectorAll(`#criteria-list-${exerciceId} .criteria-item`).length;
+            
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const pointsMax = parseFloat(slider.max);
+            const pourcentage = totalItems > 0 ? selectedItems.length / totalItems : 0;
+            const valeur = Math.round(pourcentage * pointsMax * 2) / 2;
+            
+            slider.value = valeur;
+            updateSliderValue(exerciceId);
+        }
+
+        function attribuerPoints(exerciceId, pointsMax) {
+            if (eleve.exercicesValides.includes(exerciceId)) {
+                alert('Tu as déjà validé cet exercice !');
+                return;
+            }
+            
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const pointsObtenus = parseFloat(slider.value);
+            
+            if (confirm(`Tu t'attribues ${pointsObtenus} point${pointsObtenus > 1 ? 's' : ''} sur ${pointsMax}. Es-tu d'accord ?`)) {
+                eleve.points += pointsObtenus;
+                eleve.exercicesValides.push(exerciceId);
+                sauvegarderProgression();
+                mettreAJourAffichageEleve();
+                
+                const compareBtn = document.getElementById(`compare-${exerciceId}`);
+                if (compareBtn) {
+                    compareBtn.disabled = true;
+                }
+                
+                alert(`✅ ${pointsObtenus} point${pointsObtenus > 1 ? 's' : ''} ajouté${pointsObtenus > 1 ? 's' : ''} à ton score !`);
+            }
+        }
+
+        // ==================== FONCTION RETOUR ====================
+        function retourAccueil() {
+            // Redirige vers une page d'accueil ou recharge la page
+            if (confirm("Retourner à l'accueil ? Ta progression sera conservée.")) {
+                // Option 1: Recharger la page (simule un retour)
+                location.reload();
+                // Option 2: Rediriger vers une autre page (à décommenter si besoin)
+                // window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+</html>

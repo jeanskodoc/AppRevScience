@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Mathématiques - Collège</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        /* Modal d'inscription */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 20px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .modal input:focus {
+            border-color: #2c3e50;
+        }
+
+        .modal button {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(44, 62, 80, 0.4);
+        }
+
+        /* Header avec infos élève */
+        .student-header {
+            background: linear-gradient(135deg, #e8f0fe 0%, #d4e6f1 100%);
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .student-details h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .student-details p {
+            color: #666;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            background: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+        }
+
+        /* Indicateur de trimestre */
+        .trimestre-indicator {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        /* Bouton retour */
+        .back-button-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateX(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+        }
+
+        /* Filtres et contrôles */
+        .filters-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .filters-title {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filters-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        select, .action-btn {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: #2c3e50;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 160px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4);
+        }
+
+        .reset-btn {
+            background: #ff9800;
+        }
+
+        .reset-btn:hover {
+            background: #f57c00;
+        }
+
+        /* Navigation des questions */
+        .question-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #3498db;
+            transform: translateX(-3px);
+        }
+
+        .nav-btn.next:hover:not(:disabled) {
+            transform: translateX(3px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .counter-badge {
+            background: #e9ecef;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2c3e50, #3498db);
+            transition: width 0.3s ease;
+        }
+
+        /* Cartes d'exercices */
+        .exercises-container {
+            min-height: 400px;
+            margin: 25px 0;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border-left: 6px solid #2c3e50;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+            transition: transform 0.3s;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .badge-type {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-level {
+            background: #ffc107;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-trimestre {
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: #2d3748;
+            font-weight: 500;
+            padding: 10px 0;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .option-item {
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item:hover {
+            background: #d4e6f1;
+            border-color: #2c3e50;
+            transform: translateX(5px);
+        }
+
+        .option-item.selected {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+
+        .option-item.correct {
+            background: #a5d6a7;
+            border: 2px solid #4caf50;
+            font-weight: 500;
+        }
+
+        .option-item.incorrect {
+            background: #ffcdd2;
+            border: 2px solid #f44336;
+            font-weight: 500;
+        }
+
+        .option-prefix {
+            width: 28px;
+            height: 28px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Section de comparaison et justification */
+        .comparison-section {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+            animation: slideDown 0.4s ease;
+        }
+
+        .comparison-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #f57c00;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-column {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .column-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .student-answer {
+            color: #2c3e50;
+        }
+
+        .correct-answer {
+            color: #4caf50;
+        }
+
+        .answer-content {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+
+        .justification-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+            animation: slideDown 0.4s ease;
+        }
+
+        .justification-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4caf50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .justification-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.6;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .justification-content p {
+            margin-bottom: 10px;
+        }
+
+        .justification-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .justification-content li {
+            margin: 5px 0;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .appreciation-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .appreciation-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .criteria-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .criteria-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .criteria-item.selected {
+            background: #c8e6c9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .criteria-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .criteria-item.selected .criteria-checkbox {
+            background: #4caf50;
+            content: "✓";
+        }
+
+        .score-slider {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .slider-value {
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #4caf50, #ffc107, #f44336);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #2c3e50;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .award-points-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .award-points-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .award-points-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .analysis-section {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #2c3e50;
+        }
+
+        .analysis-section.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .answer-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #4caf50;
+        }
+
+        .answer-section.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .result-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .result-correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .result-incorrect {
+            background: #ffcdd2;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .points-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn-primary, .btn-secondary, .btn-analyse {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4);
+        }
+
+        .btn-analyse {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-analyse:hover:not(:disabled) {
+            background: #f57c00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-primary:disabled, .btn-secondary:disabled, .btn-analyse:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .no-exercises {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 1.1em;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .filters-grid {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .student-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .student-info {
+                flex-direction: column;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal d'inscription -->
+    <div id="inscriptionModal" class="modal active">
+        <div class="modal-content">
+            <h2>📐 Bienvenue en Mathématiques !</h2>
+            <p>Pour commencer à réviser, quel est ton prénom ?</p>
+            <input type="text" id="studentNameInput" placeholder="Entre ton prénom..." autofocus>
+            <button onclick="inscrireEleve()">C'est parti !</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent" style="display: none;">
+        <!-- Bouton retour -->
+        <div class="back-button-container">
+            <button class="back-btn" onclick="retourAccueil()">
+                <span>←</span> Retour à l'accueil
+            </button>
+        </div>
+
+        <!-- Header avec infos élève -->
+        <div class="student-header">
+            <div class="student-info">
+                <div class="student-avatar" id="studentAvatar"></div>
+                <div class="student-details">
+                    <h3 id="studentName"></h3>
+                    <p>
+                        <span>📚 Classe : <span id="studentClass"></span></span>
+                        <span class="stars" id="starsDisplay">☆☆☆☆☆</span>
+                    </p>
+                </div>
+            </div>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value" id="scoreDisplay">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="exercisesDone">0</div>
+                    <div class="stat-label">/20</div>
+                </div>
+                <button class="reset-btn action-btn" onclick="reinitialiserProgression()" style="padding: 8px 15px;" title="Réinitialiser ma progression">
+                    ⟲
+                </button>
+            </div>
+        </div>
+
+        <h1>
+            <span>📐 Révision Mathématiques</span>
+        </h1>
+        <div class="subtitle">Collège - 10 questions par série (20 points)</div>
+
+        <!-- Filtres -->
+        <div class="filters-section">
+            <div class="filters-title">
+                <span>⚙️</span> Filtres de révision
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Niveau</label>
+                    <select id="niveau" onchange="changerClasse()">
+                        <option value="6eme">6ème</option>
+                        <option value="5eme">5ème</option>
+                        <option value="4eme">4ème</option>
+                        <option value="3eme">3ème</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Type d'exercice</label>
+                    <select id="typeExercice">
+                        <option value="qcm">QCM (2 pts)</option>
+                        <option value="evaluation">Situation d'évaluation (2 pts)</option>
+                        <option value="vf">Vrai ou Faux (2 pts)</option>
+                        <option value="traditionnelle">Question ouverte (2 pts)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Trimestre</label>
+                    <select id="trimestre" onchange="changerTrimestre()">
+                        <option value="1">Trimestre 1</option>
+                        <option value="2">Trimestre 2</option>
+                        <option value="3">Trimestre 3</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label> </label>
+                    <button class="action-btn" onclick="genererNouvelleSerie()">
+                        <span>🎲</span> Nouvelle série
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de progression -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <!-- Navigation des questions -->
+        <div class="question-nav">
+            <button class="nav-btn" id="prevBtn" onclick="changerQuestion('prev')" disabled>
+                ← Précédent
+            </button>
+            <span class="counter-badge" id="questionCounter">
+                Question <span id="currentQuestion">1</span>/<span id="totalQuestions">10</span>
+                <span class="trimestre-indicator" id="trimestreDisplay">T1</span>
+            </span>
+            <button class="nav-btn next" id="nextBtn" onclick="changerQuestion('next')">
+                Suivant →
+            </button>
+        </div>
+
+        <div id="exercicesList" class="exercises-container">
+            <!-- Les exercices seront générés ici -->
+        </div>
+
+        <div class="footer">
+            <p>✨ Application de révision Mathématiques - Collège ✨</p>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DONNÉES MATHÉMATIQUES ====================
+        const exercicesMaths = {
+            qcm: {
+                theme: "QCM",
+                points: 2,
+                questions: [
+                    // 6ème - Nombres et calculs
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Quel est le résultat de 15 + 23 ?",
+                        options: ["38", "35", "42", "28"],
+                        reponse: 0,
+                        explication: "15 + 23 = 38. On additionne les unités (5+3=8) et les dizaines (1+2=3), ce qui donne 38."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Combien font 7 × 8 ?",
+                        options: ["56", "48", "64", "54"],
+                        reponse: 0,
+                        explication: "7 × 8 = 56. C'est un résultat de la table de multiplication qu'il faut connaître par cœur."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Quelle est la moitié de 24 ?",
+                        options: ["12", "6", "8", "10"],
+                        reponse: 0,
+                        explication: "La moitié de 24 est 12 car 24 ÷ 2 = 12."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Quelle est l'aire d'un carré de côté 5 cm ?",
+                        options: ["25 cm²", "20 cm²", "10 cm²", "15 cm²"],
+                        reponse: 0,
+                        explication: "L'aire d'un carré se calcule par côté × côté. 5 × 5 = 25 cm²."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Quel est le périmètre d'un rectangle de longueur 8 cm et largeur 3 cm ?",
+                        options: ["22 cm", "24 cm", "11 cm", "16 cm"],
+                        reponse: 0,
+                        explication: "Périmètre = 2 × (longueur + largeur) = 2 × (8 + 3) = 2 × 11 = 22 cm."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Comment écrit-on 75 en chiffres romains ?",
+                        options: ["LXXV", "LXXIV", "LXXVI", "LXXVII"],
+                        reponse: 0,
+                        explication: "75 = 70 (LXX) + 5 (V) = LXXV."
+                    },
+                    // 5ème - Fractions
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Que vaut 3/4 + 1/4 ?",
+                        options: ["1", "4/4", "2/4", "4/8"],
+                        reponse: 0,
+                        explication: "3/4 + 1/4 = 4/4 = 1."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Simplifie la fraction 8/12.",
+                        options: ["2/3", "4/6", "3/4", "1/3"],
+                        reponse: 0,
+                        explication: "8/12 = (8÷4)/(12÷4) = 2/3."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Quelle est l'écriture décimale de 3/5 ?",
+                        options: ["0,6", "0,35", "0,5", "0,3"],
+                        reponse: 0,
+                        explication: "3/5 = 3 ÷ 5 = 0,6."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Combien font 25% de 80 ?",
+                        options: ["20", "25", "30", "40"],
+                        reponse: 0,
+                        explication: "25% de 80 = 80 × 25/100 = 80 × 0,25 = 20."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Quelle est la médiane de la série : 12, 15, 18, 21, 24 ?",
+                        options: ["18", "15", "21", "20"],
+                        reponse: 0,
+                        explication: "La médiane est la valeur du milieu : 18."
+                    },
+                    // 4ème - Calcul littéral
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Simplifie l'expression 3x + 5x.",
+                        options: ["8x", "15x", "x", "8x²"],
+                        reponse: 0,
+                        explication: "3x + 5x = (3+5)x = 8x."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Résous l'équation x + 7 = 15.",
+                        options: ["x = 8", "x = 22", "x = 7", "x = 15"],
+                        reponse: 0,
+                        explication: "x + 7 = 15 ⇒ x = 15 - 7 = 8."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Développe 3(x + 4).",
+                        options: ["3x + 12", "3x + 4", "x + 12", "3x + 7"],
+                        reponse: 0,
+                        explication: "3(x + 4) = 3 × x + 3 × 4 = 3x + 12."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Quelle est la valeur de 2² + 3² ?",
+                        options: ["13", "10", "25", "9"],
+                        reponse: 0,
+                        explication: "2² + 3² = 4 + 9 = 13."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Dans un triangle rectangle, le théorème de Pythagore s'écrit :",
+                        options: ["a² = b² + c²", "a = b + c", "a² = b + c", "a = b² + c²"],
+                        reponse: 0,
+                        explication: "Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme des carrés des deux autres côtés."
+                    },
+                    // 3ème - Fonctions, probabilités
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Quelle est la formule du volume d'une boule ?",
+                        options: ["4/3 π r³", "π r²", "4 π r²", "π r³"],
+                        reponse: 0,
+                        explication: "Le volume d'une boule de rayon r est V = 4/3 × π × r³."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Calcule (3x)².",
+                        options: ["9x²", "6x²", "3x²", "9x"],
+                        reponse: 0,
+                        explication: "(3x)² = 3² × x² = 9x²."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Une fonction affine est de la forme :",
+                        options: ["f(x) = ax + b", "f(x) = ax² + b", "f(x) = a/x", "f(x) = √x"],
+                        reponse: 0,
+                        explication: "Une fonction affine s'écrit f(x) = ax + b, où a est le coefficient directeur et b l'ordonnée à l'origine."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Quelle est la probabilité d'obtenir un nombre pair en lançant un dé à 6 faces ?",
+                        options: ["1/2", "1/3", "1/6", "2/3"],
+                        reponse: 0,
+                        explication: "Il y a 3 nombres pairs (2,4,6) sur 6 faces, soit 3/6 = 1/2."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "La trigonométrie dans le triangle rectangle, le cosinus d'un angle aigu est :",
+                        options: ["adjacent/hypoténuse", "opposé/hypoténuse", "opposé/adjacent", "adjacent/opposé"],
+                        reponse: 0,
+                        explication: "Cosinus = côté adjacent / hypoténuse. Sinus = opposé / hypoténuse. Tangente = opposé / adjacent."
+                    }
+                ]
+            },
+            evaluation: {
+                theme: "Situation d'évaluation",
+                points: 2,
+                questions: [
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Situation: Tu as 25 € dans ton porte-monnaie. Tu achètes un livre à 12 € et un stylo à 3 €. Combien te reste-t-il ?",
+                        consigne: "Écris le calcul et donne le résultat.",
+                        elements_reponse: ["25 - 12 - 3", "13 - 3", "10 €"],
+                        explication: "On soustrait d'abord le prix du livre : 25 - 12 = 13 €. Puis on soustrait le prix du stylo : 13 - 3 = 10 €. Il reste 10 €."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Situation: Une table rectangulaire mesure 1,20 m de long et 0,80 m de large. Quel est son périmètre ?",
+                        consigne: "Utilise la formule du périmètre du rectangle.",
+                        elements_reponse: ["2 × (L + l)", "2 × (1,20 + 0,80)", "2 × 2,00 = 4 m"],
+                        explication: "Périmètre = 2 × (longueur + largeur) = 2 × (1,20 + 0,80) = 2 × 2,00 = 4 mètres."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Situation: Un camion peut transporter 850 kg. Il y a 6 caisses de 45 kg chacune à charger. Le camion peut-il transporter toutes les caisses en un seul voyage ?",
+                        consigne: "Calcule la masse totale et compare avec la capacité.",
+                        elements_reponse: ["6 × 45 = 270 kg", "270 < 850", "Oui"],
+                        explication: "Masse totale = 6 × 45 = 270 kg. Comme 270 < 850, le camion peut transporter toutes les caisses."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Situation: Pour faire une crêpe, il faut 125 g de farine. Combien de crêpes peut-on faire avec 1 kg de farine ?",
+                        consigne: "Convertis 1 kg en grammes et divise.",
+                        elements_reponse: ["1 kg = 1000 g", "1000 ÷ 125 = 8", "8 crêpes"],
+                        explication: "1 kg = 1000 g. Nombre de crêpes = 1000 ÷ 125 = 8. On peut faire 8 crêpes."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Situation: Un magasin offre une réduction de 30% sur un article coûtant 50 €. Quel est le montant de la réduction ? Quel est le nouveau prix ?",
+                        consigne: "Calcule la réduction puis le prix final.",
+                        elements_reponse: ["30% de 50 = 15 €", "50 - 15 = 35 €"],
+                        explication: "Réduction = 50 × 30/100 = 15 €. Nouveau prix = 50 - 15 = 35 €."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Situation: Dans une classe de 28 élèves, les 3/4 sont des filles. Combien y a-t-il de garçons ?",
+                        consigne: "Calcule d'abord le nombre de filles, puis celui des garçons.",
+                        elements_reponse: ["Filles = 28 × 3/4 = 21", "Garçons = 28 - 21 = 7"],
+                        explication: "Filles = 28 × 3/4 = 21. Garçons = 28 - 21 = 7."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Situation: Un rectangle a pour longueur 8 cm et pour largeur 5 cm. On augmente sa longueur de 2 cm et sa largeur de 1 cm. De combien augmente son aire ?",
+                        consigne: "Calcule l'aire initiale, la nouvelle aire, puis la différence.",
+                        elements_reponse: ["Aire initiale = 8×5 = 40 cm²", "Nouvelle aire = 10×6 = 60 cm²", "Augmentation = 20 cm²"],
+                        explication: "Aire initiale = 8 × 5 = 40 cm². Nouvelle longueur = 10 cm, nouvelle largeur = 6 cm. Nouvelle aire = 10 × 6 = 60 cm². Augmentation = 60 - 40 = 20 cm²."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Situation: 3 kg de pommes coûtent 5,40 €. Quel est le prix de 5 kg ?",
+                        consigne: "Trouve d'abord le prix d'un kilogramme.",
+                        elements_reponse: ["Prix au kg = 5,40 ÷ 3 = 1,80 €", "5 × 1,80 = 9 €"],
+                        explication: "Prix au kg = 5,40 ÷ 3 = 1,80 €. Pour 5 kg : 5 × 1,80 = 9 €."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Situation: On considère un triangle rectangle dont les côtés de l'angle droit mesurent 6 cm et 8 cm. Calcule la longueur de l'hypoténuse.",
+                        consigne: "Applique le théorème de Pythagore.",
+                        elements_reponse: ["Hypoténuse² = 6² + 8²", "36 + 64 = 100", "√100 = 10 cm"],
+                        explication: "D'après le théorème de Pythagore : hypoténuse² = 6² + 8² = 36 + 64 = 100. Donc hypoténuse = √100 = 10 cm."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Situation: Une boule de rayon 3 cm. Calcule son volume (arrondi au cm³ près).",
+                        consigne: "Utilise la formule V = 4/3 π r³ avec π ≈ 3,14.",
+                        elements_reponse: ["V = 4/3 × 3,14 × 3³", "4/3 × 3,14 × 27", "4/3 × 84,78 = 113,04 ≈ 113 cm³"],
+                        explication: "V = 4/3 × π × 3³ = 4/3 × 3,14 × 27 = (4 × 3,14 × 27) / 3 = (4 × 84,78) / 3 = 339,12 / 3 = 113,04 ≈ 113 cm³."
+                    }
+                ]
+            },
+            vf: {
+                theme: "Vrai ou Faux",
+                points: 2,
+                questions: [
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "25 + 15 = 40.",
+                        reponse: true,
+                        explication: "Vrai. 25 + 15 = 40."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "7 × 6 = 42.",
+                        reponse: true,
+                        explication: "Vrai. 7 × 6 = 42."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Un carré a toujours 4 côtés égaux.",
+                        reponse: true,
+                        explication: "Vrai. Un carré a 4 côtés de même longueur et 4 angles droits."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Le périmètre d'un cercle se calcule avec la formule π × R (R = rayon).",
+                        reponse: false,
+                        explication: "Faux. La formule est 2 × π × R (ou π × D, avec D le diamètre)."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "3/4 = 0,75.",
+                        reponse: true,
+                        explication: "Vrai. 3 ÷ 4 = 0,75."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "5/8 > 3/4.",
+                        reponse: false,
+                        explication: "Faux. 3/4 = 6/8, donc 5/8 < 3/4."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "25% de 200 = 50.",
+                        reponse: true,
+                        explication: "Vrai. 200 × 0,25 = 50."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "La moyenne de 12, 15 et 18 est 15.",
+                        reponse: true,
+                        explication: "Vrai. (12+15+18)/3 = 45/3 = 15."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "3x × 2x = 6x.",
+                        reponse: false,
+                        explication: "Faux. 3x × 2x = 6x²."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Un triangle rectangle a toujours un angle droit.",
+                        reponse: true,
+                        explication: "Vrai. Par définition, un triangle rectangle possède un angle droit."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Dans un triangle rectangle, l'hypoténuse est le côté le plus long.",
+                        reponse: true,
+                        explication: "Vrai. L'hypoténuse est le côté opposé à l'angle droit, et c'est le plus long côté."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "(3x)² = 9x².",
+                        reponse: true,
+                        explication: "Vrai. (3x)² = 3² × x² = 9x²."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 2,
+                        question: "Une fonction linéaire est de la forme f(x) = ax + b.",
+                        reponse: false,
+                        explication: "Faux. Une fonction linéaire est de la forme f(x) = ax. Une fonction affine est de la forme f(x) = ax + b."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 3,
+                        question: "La probabilité d'un événement est toujours comprise entre 0 et 1.",
+                        reponse: true,
+                        explication: "Vrai. Une probabilité est toujours entre 0 (impossible) et 1 (certain)."
+                    }
+                ]
+            },
+            traditionnelle: {
+                theme: "Question ouverte",
+                points: 2,
+                questions: [
+                    {
+                        niveau: "6eme",
+                        trimestre: 1,
+                        question: "Explique comment on additionne deux nombres à plusieurs chiffres, par exemple 245 + 137.",
+                        mots_cles: ["Addition", "Colonnes", "Unités", "Dizaines", "Centaines", "Retenue"],
+                        explication: "On aligne les nombres par colonnes (unités sous unités, dizaines sous dizaines...). On additionne d'abord les unités (5+7=12, on pose 2 et on retient 1). Puis les dizaines avec la retenue (4+3+1=8). Enfin les centaines (2+1=3). Le résultat est 382."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 2,
+                        question: "Quelle est la différence entre un carré et un rectangle ?",
+                        mots_cles: ["Carré", "Rectangle", "Côtés", "Angles droits", "Égalité"],
+                        explication: "Un carré et un rectangle ont tous deux 4 angles droits. Un rectangle a des côtés opposés égaux deux à deux. Un carré a ses 4 côtés de même longueur. Le carré est donc un rectangle particulier."
+                    },
+                    {
+                        niveau: "6eme",
+                        trimestre: 3,
+                        question: "Comment calcule-t-on l'aire d'un rectangle ? Explique avec un exemple.",
+                        mots_cles: ["Aire", "Longueur", "Largeur", "Multiplication", "cm²"],
+                        explication: "L'aire d'un rectangle se calcule en multipliant sa longueur par sa largeur. Par exemple, pour un rectangle de longueur 8 cm et largeur 3 cm, l'aire = 8 × 3 = 24 cm²."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 1,
+                        question: "Explique comment simplifier une fraction. Donne un exemple.",
+                        mots_cles: ["Fraction", "Simplifier", "Diviser", "Numérateur", "Dénominateur", "PGCD"],
+                        explication: "Pour simplifier une fraction, on divise le numérateur et le dénominateur par un diviseur commun. On cherche le Plus Grand Commun Diviseur (PGCD). Exemple : 12/18 = (12÷6)/(18÷6) = 2/3. On peut aussi simplifier étape par étape."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 2,
+                        question: "Comment calcule-t-on un pourcentage ? Donne un exemple.",
+                        mots_cles: ["Pourcentage", "Pour cent", "Multiplication", "Division", "Proportion"],
+                        explication: "Un pourcentage représente une proportion sur 100. Pour calculer t% d'une quantité, on multiplie la quantité par t/100. Exemple : 30% de 50 € = 50 × 30/100 = 50 × 0,3 = 15 €."
+                    },
+                    {
+                        niveau: "5eme",
+                        trimestre: 3,
+                        question: "Explique ce qu'est la moyenne d'une série de nombres. Comment la calcule-t-on ?",
+                        mots_cles: ["Moyenne", "Somme", "Effectif", "Division", "Statistiques"],
+                        explication: "La moyenne d'une série de nombres est la somme de toutes les valeurs divisée par le nombre de valeurs. Exemple : pour les notes 12, 15, 18, on calcule (12+15+18)/3 = 45/3 = 15."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 1,
+                        question: "Qu'est-ce qu'une équation ? Explique comment résoudre une équation simple comme x + 7 = 15.",
+                        mots_cles: ["Équation", "Inconnue", "Résoudre", "Solution", "Égalité"],
+                        explication: "Une équation est une égalité qui contient une inconnue (souvent x). Résoudre une équation, c'est trouver la valeur de l'inconnue qui rend l'égalité vraie. Pour x + 7 = 15, on isole x en soustrayant 7 des deux côtés : x = 15 - 7 = 8."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 2,
+                        question: "Énonce le théorème de Pythagore et explique à quoi il sert.",
+                        mots_cles: ["Triangle rectangle", "Hypoténuse", "Carré", "Somme", "Longueur"],
+                        explication: "Dans un triangle rectangle, le carré de l'hypoténuse (le côté opposé à l'angle droit) est égal à la somme des carrés des deux autres côtés. Il sert à calculer une longueur dans un triangle rectangle. Exemple : si les côtés de l'angle droit mesurent 3 et 4, l'hypoténuse mesure √(3²+4²) = √25 = 5."
+                    },
+                    {
+                        niveau: "4eme",
+                        trimestre: 3,
+                        question: "Qu'est-ce qu'une puissance ? Explique ce que signifie 3⁴ et calcule-le.",
+                        mots_cles: ["Puissance", "Exposant", "Multiplication", "Base"],
+                        explication: "Une puissance est une multiplication répétée. aⁿ signifie a multiplié par lui-même n fois. 3⁴ = 3 × 3 × 3 × 3 = 81. 3 est la base, 4 est l'exposant."
+                    },
+                    {
+                        niveau: "3eme",
+                        trimestre: 1,
+                        question: "Explique la différence entre une fonction linéaire et une fonction affine. Donne des exemples.",
+                        mots_cles: ["Fonction", "Linéaire", "Affine", "Proportionnalité", "Ordonnée à l'origine"],
+                        explication: "Une fonction linéaire est de la forme f(x) = ax. Elle représente une situation de proportionnalité (elle passe par l'origine). Exemple : f(x) = 3x. Une fonction affine est de la forme f(x) = ax + b. Sa représentation est une droite qui ne passe pas forcément par l'origine. Exemple : f(x) = 2x + 1."
+                    }
+                ]
+            }
+        };
+
+        // ==================== ÉTAT GLOBAL ====================
+        let eleve = {
+            nom: '',
+            classe: '6eme',
+            points: 0,
+            exercicesValides: [],
+            exercicesTotal: 0
+        };
+
+        let exercicesActuels = [];
+        let questionActuelle = 0;
+        let reponsesUtilisateur = {};
+
+        // ==================== FONCTIONS PRINCIPALES ====================
+        function inscrireEleve() {
+            const nom = document.getElementById('studentNameInput').value.trim();
+            if (nom === '') {
+                alert('Veuillez entrer ton prénom pour continuer !');
+                return;
+            }
+
+            eleve.nom = nom;
+            document.getElementById('inscriptionModal').classList.remove('active');
+            document.getElementById('mainContent').style.display = 'block';
+            
+            mettreAJourAffichageEleve();
+            chargerProgression();
+            genererNouvelleSerie();
+        }
+
+        function mettreAJourAffichageEleve() {
+            document.getElementById('studentAvatar').textContent = eleve.nom.charAt(0).toUpperCase();
+            document.getElementById('studentName').textContent = eleve.nom;
+            document.getElementById('studentClass').textContent = eleve.classe;
+            document.getElementById('scoreDisplay').textContent = eleve.points;
+            document.getElementById('exercisesDone').textContent = eleve.exercicesValides.length;
+            
+            const etoiles = Math.min(5, Math.floor(eleve.points / 5));
+            document.getElementById('starsDisplay').textContent = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
+        }
+
+        function changerClasse() {
+            eleve.classe = document.getElementById('niveau').value;
+            mettreAJourAffichageEleve();
+            sauvegarderProgression();
+            genererNouvelleSerie();
+        }
+
+        function changerTrimestre() {
+            genererNouvelleSerie();
+        }
+
+        function sauvegarderProgression() {
+            localStorage.setItem('eleveMaths', JSON.stringify(eleve));
+        }
+
+        function chargerProgression() {
+            const saved = localStorage.getItem('eleveMaths');
+            if (saved) {
+                const savedEleve = JSON.parse(saved);
+                if (savedEleve.nom === eleve.nom) {
+                    eleve = savedEleve;
+                    document.getElementById('niveau').value = eleve.classe;
+                    mettreAJourAffichageEleve();
+                }
+            }
+        }
+
+        function reinitialiserProgression() {
+            if (confirm('Es-tu sûr de vouloir réinitialiser ta progression ?')) {
+                eleve.points = 0;
+                eleve.exercicesValides = [];
+                eleve.exercicesTotal = 0;
+                sauvegarderProgression();
+                mettreAJourAffichageEleve();
+                genererNouvelleSerie();
+            }
+        }
+
+        function genererNouvelleSerie() {
+            const niveau = document.getElementById('niveau').value;
+            const type = document.getElementById('typeExercice').value;
+            const trimestre = parseInt(document.getElementById('trimestre').value);
+            
+            const exercicesFiltres = exercicesMaths[type].questions.filter(ex => 
+                ex.niveau === niveau && ex.trimestre === trimestre
+            );
+
+            if (exercicesFiltres.length === 0) {
+                document.getElementById('exercicesList').innerHTML = '<div class="no-exercises">📭 Aucun exercice disponible pour ce trimestre</div>';
+                return;
+            }
+
+            // Prendre 10 questions maximum
+            exercicesActuels = exercicesFiltres
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 10);
+
+            questionActuelle = 0;
+            reponsesUtilisateur = {};
+            afficherQuestion(questionActuelle);
+            mettreAJourNavigation();
+            
+            document.getElementById('trimestreDisplay').textContent = `T${trimestre}`;
+            document.getElementById('totalQuestions').textContent = exercicesActuels.length;
+        }
+
+        function afficherQuestion(index) {
+            if (!exercicesActuels.length || index < 0 || index >= exercicesActuels.length) return;
+
+            const container = document.getElementById('exercicesList');
+            const ex = exercicesActuels[index];
+            const type = document.getElementById('typeExercice').value;
+            const points = exercicesMaths[type].points;
+            
+            const exerciceId = `${type}_${Date.now()}_${index}`;
+            const dejaValide = eleve.exercicesValides.includes(exerciceId);
+            
+            let contenu = `
+                <div class="exercise-card" data-exercice-id="${exerciceId}">
+                    <div class="card-header">
+                        <span class="badge-type">${exercicesMaths[type].theme}</span>
+                        <span class="badge-level">${ex.niveau}</span>
+                        <span class="badge-trimestre">Trimestre ${ex.trimestre}</span>
+                    </div>
+            `;
+
+            if (type === 'qcm') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    <ul class="options-list" id="options-${exerciceId}">
+                        ${ex.options.map((opt, i) => `
+                            <li class="option-item" onclick="selectionnerReponse('${exerciceId}', ${i})">
+                                <span class="option-prefix">${String.fromCharCode(65 + i)}</span>
+                                ${opt}
+                            </li>
+                        `).join('')}
+                    </ul>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" id="compare-${exerciceId}" onclick="comparerEtJustifierQCM('${exerciceId}', ${ex.reponse}, '${ex.explication.replace(/'/g, "\\'")}', ${points})" ${dejaValide ? 'disabled' : ''}>
+                            🔍 Comparer et voir la justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'evaluation') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    <p style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        <strong>📝 Consigne :</strong> ${ex.consigne}
+                    </p>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" onclick="comparerEtJustifierEvaluation('${exerciceId}', ${JSON.stringify(ex.elements_reponse)}, '${ex.explication.replace(/'/g, "\\'")}', ${points})">
+                            🔍 Auto-évaluation avec justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'vf') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    
+                    <div class="options-list" id="options-${exerciceId}">
+                        <li class="option-item" onclick="selectionnerVF('${exerciceId}', true)">
+                            <span class="option-prefix">V</span>
+                            Vrai
+                        </li>
+                        <li class="option-item" onclick="selectionnerVF('${exerciceId}', false)">
+                            <span class="option-prefix">F</span>
+                            Faux
+                        </li>
+                    </div>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" id="compare-${exerciceId}" onclick="comparerEtJustifierVF('${exerciceId}', ${ex.reponse}, '${ex.explication.replace(/'/g, "\\'")}', ${points})" ${dejaValide ? 'disabled' : ''}>
+                            🔍 Comparer et voir la justification
+                        </button>
+                    </div>
+                `;
+            }
+            else if (type === 'traditionnelle') {
+                contenu += `
+                    <div class="question-text">${ex.question}</div>
+                    
+                    <div id="comparison-${exerciceId}"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-analyse" onclick="comparerEtJustifierTraditionnelle('${exerciceId}', ${JSON.stringify(ex.mots_cles)}, '${ex.explication.replace(/'/g, "\\'")}', ${points})">
+                            🔍 Auto-évaluation avec justification
+                        </button>
+                    </div>
+                `;
+            }
+
+            contenu += `</div>`;
+            container.innerHTML = contenu;
+            
+            document.getElementById('currentQuestion').textContent = index + 1;
+            document.getElementById('totalQuestions').textContent = exercicesActuels.length;
+            
+            const progression = ((index + 1) / exercicesActuels.length) * 100;
+            document.getElementById('progressFill').style.width = `${progression}%`;
+        }
+
+        function changerQuestion(direction) {
+            if (direction === 'prev' && questionActuelle > 0) {
+                questionActuelle--;
+            } else if (direction === 'next' && questionActuelle < exercicesActuels.length - 1) {
+                questionActuelle++;
+            }
+            
+            afficherQuestion(questionActuelle);
+            mettreAJourNavigation();
+        }
+
+        function mettreAJourNavigation() {
+            document.getElementById('prevBtn').disabled = questionActuelle === 0;
+            document.getElementById('nextBtn').disabled = questionActuelle === exercicesActuels.length - 1;
+        }
+
+        function selectionnerReponse(exerciceId, optionIndex) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            options[optionIndex].classList.add('selected');
+            
+            reponsesUtilisateur[exerciceId] = {
+                type: 'qcm',
+                reponse: optionIndex
+            };
+            
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            if (comparisonDiv) comparisonDiv.innerHTML = '';
+        }
+
+        function selectionnerVF(exerciceId, valeur) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            const clickedOption = event.currentTarget;
+            clickedOption.classList.add('selected');
+            clickedOption.dataset.valeur = valeur;
+            
+            reponsesUtilisateur[exerciceId] = {
+                type: 'vf',
+                reponse: valeur
+            };
+            
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            if (comparisonDiv) comparisonDiv.innerHTML = '';
+        }
+
+        function comparerEtJustifierQCM(exerciceId, bonneReponse, explication, pointsMax) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            let reponseSelectionnee = -1;
+            let reponseTexte = '';
+            
+            options.forEach((opt, index) => {
+                if (opt.classList.contains('selected')) {
+                    reponseSelectionnee = index;
+                    reponseTexte = opt.textContent.replace(/[A-D]/, '').trim();
+                }
+            });
+
+            if (reponseSelectionnee === -1) {
+                alert('Sélectionne d\'abord une réponse !');
+                return;
+            }
+
+            const ex = exercicesActuels[questionActuelle];
+            const bonneReponseTexte = ex.options[bonneReponse];
+            
+            options.forEach((opt, index) => {
+                opt.classList.remove('correct', 'incorrect');
+                if (index === bonneReponse) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            if (reponseSelectionnee === bonneReponse) {
+                options[reponseSelectionnee].classList.add('correct');
+            } else {
+                options[reponseSelectionnee].classList.add('incorrect');
+            }
+
+            const estCorrect = reponseSelectionnee === bonneReponse;
+            const valeurDefaut = estCorrect ? pointsMax : Math.floor(pointsMax / 2);
+
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            comparisonDiv.innerHTML = `
+                <div class="comparison-section">
+                    <div class="comparison-title">
+                        <span>📊 Comparaison des réponses</span>
+                    </div>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-column">
+                            <div class="column-header student-answer">
+                                <span>👤 Ta réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${String.fromCharCode(65 + reponseSelectionnee)}</strong> - ${reponseTexte}
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-column">
+                            <div class="column-header correct-answer">
+                                <span>✅ Bonne réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${String.fromCharCode(65 + bonneReponse)}</strong> - ${bonneReponseTexte}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Justification de la bonne réponse</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>⭐ Auto-évaluation</span>
+                    </div>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">${valeurDefaut}</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="${valeurDefaut}" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        ${estCorrect 
+                            ? "🎉 Ta réponse est correcte ! Tu peux t'attribuer la note maximale." 
+                            : "💡 Tu peux t'attribuer des points en fonction de ta compréhension de la justification."}
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierVF(exerciceId, bonneReponse, explication, pointsMax) {
+            const options = document.querySelectorAll(`#options-${exerciceId} .option-item`);
+            let reponseSelectionnee = null;
+            let reponseTexte = '';
+            
+            options.forEach(opt => {
+                if (opt.classList.contains('selected')) {
+                    reponseSelectionnee = opt.dataset.valeur === 'true';
+                    reponseTexte = reponseSelectionnee ? 'Vrai' : 'Faux';
+                }
+            });
+
+            if (reponseSelectionnee === null) {
+                alert('Sélectionne Vrai ou Faux !');
+                return;
+            }
+
+            const estCorrect = reponseSelectionnee === bonneReponse;
+            const valeurDefaut = estCorrect ? pointsMax : 0;
+
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+            
+            options.forEach(opt => {
+                if ((opt.dataset.valeur === 'true' && bonneReponse) || 
+                    (opt.dataset.valeur === 'false' && !bonneReponse)) {
+                    opt.classList.add('correct');
+                }
+            });
+
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            comparisonDiv.innerHTML = `
+                <div class="comparison-section">
+                    <div class="comparison-title">
+                        <span>📊 Comparaison des réponses</span>
+                    </div>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-column">
+                            <div class="column-header student-answer">
+                                <span>👤 Ta réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${reponseTexte}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-column">
+                            <div class="column-header correct-answer">
+                                <span>✅ Bonne réponse</span>
+                            </div>
+                            <div class="answer-content">
+                                <strong>${bonneReponse ? 'Vrai' : 'Faux'}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Justification de la bonne réponse</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>⭐ Auto-évaluation</span>
+                    </div>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">${valeurDefaut}</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="${valeurDefaut}" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        ${estCorrect 
+                            ? "🎉 Ta réponse est correcte ! Tu peux t'attribuer la note maximale." 
+                            : "💡 Maintenant que tu connais la bonne réponse, combien de points penses-tu mériter ?"}
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierEvaluation(exerciceId, elementsAttendus, explication, pointsMax) {
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            
+            let criteresHtml = '';
+            elementsAttendus.forEach((element, index) => {
+                criteresHtml += `
+                    <li class="criteria-item" onclick="toggleCriteria('${exerciceId}', ${index})">
+                        <span class="criteria-checkbox" id="criteria-${exerciceId}-${index}">✓</span>
+                        ${element}
+                    </li>
+                `;
+            });
+
+            comparisonDiv.innerHTML = `
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Explication et attentes</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                        <p style="margin-top: 10px;"><strong>Éléments attendus :</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${elementsAttendus.map(el => `<li>${el}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>✅ Éléments que tu as inclus</span>
+                    </div>
+                    
+                    <ul class="criteria-list" id="criteria-list-${exerciceId}">
+                        ${criteresHtml}
+                    </ul>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">0</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="0" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        💡 Coche les éléments que tu as mentionnés, puis ajuste le curseur pour te donner une note.
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function comparerEtJustifierTraditionnelle(exerciceId, motsCles, explication, pointsMax) {
+            const comparisonDiv = document.getElementById(`comparison-${exerciceId}`);
+            
+            let criteresHtml = '';
+            motsCles.forEach((mot, index) => {
+                criteresHtml += `
+                    <li class="criteria-item" onclick="toggleCriteria('${exerciceId}', ${index})">
+                        <span class="criteria-checkbox" id="criteria-${exerciceId}-${index}">✓</span>
+                        ${mot}
+                    </li>
+                `;
+            });
+
+            comparisonDiv.innerHTML = `
+                <div class="justification-section">
+                    <div class="justification-title">
+                        <span>📚 Explication et mots-clés</span>
+                    </div>
+                    <div class="justification-content">
+                        <p>${explication}</p>
+                        <p style="margin-top: 10px;"><strong>Mots-clés importants :</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${motsCles.map(mot => `<li>${mot}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="appreciation-section">
+                    <div class="appreciation-title">
+                        <span>🔑 Mots-clés utilisés</span>
+                    </div>
+                    
+                    <ul class="criteria-list" id="criteria-list-${exerciceId}">
+                        ${criteresHtml}
+                    </ul>
+                    
+                    <div class="score-slider">
+                        <div class="slider-label">
+                            <span>Note sur ${pointsMax} points :</span>
+                            <span class="slider-value" id="slider-value-${exerciceId}">0</span>
+                        </div>
+                        <input type="range" id="score-slider-${exerciceId}" min="0" max="${pointsMax}" step="0.5" value="0" oninput="updateSliderValue('${exerciceId}')">
+                    </div>
+                    
+                    <p style="margin: 15px 0; color: #666;">
+                        💡 Coche les mots-clés que tu as utilisés, puis ajuste le curseur pour te donner une note.
+                    </p>
+                    
+                    <button class="award-points-btn" onclick="attribuerPoints('${exerciceId}', ${pointsMax})">
+                        🏆 Valider ma note
+                    </button>
+                </div>
+            `;
+        }
+
+        function updateSliderValue(exerciceId) {
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const valueDisplay = document.getElementById(`slider-value-${exerciceId}`);
+            if (slider && valueDisplay) {
+                valueDisplay.textContent = slider.value;
+            }
+        }
+
+        function toggleCriteria(exerciceId, index) {
+            const checkbox = document.getElementById(`criteria-${exerciceId}-${index}`);
+            const item = checkbox.parentElement;
+            
+            item.classList.toggle('selected');
+            
+            const selectedItems = document.querySelectorAll(`#criteria-list-${exerciceId} .criteria-item.selected`);
+            const totalItems = document.querySelectorAll(`#criteria-list-${exerciceId} .criteria-item`).length;
+            
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const pointsMax = parseFloat(slider.max);
+            const pourcentage = totalItems > 0 ? selectedItems.length / totalItems : 0;
+            const valeur = Math.round(pourcentage * pointsMax * 2) / 2;
+            
+            slider.value = valeur;
+            updateSliderValue(exerciceId);
+        }
+
+        function attribuerPoints(exerciceId, pointsMax) {
+            if (eleve.exercicesValides.includes(exerciceId)) {
+                alert('Tu as déjà validé cet exercice !');
+                return;
+            }
+            
+            const slider = document.getElementById(`score-slider-${exerciceId}`);
+            const pointsObtenus = parseFloat(slider.value);
+            
+            if (confirm(`Tu t'attribues ${pointsObtenus} point${pointsObtenus > 1 ? 's' : ''} sur ${pointsMax}. Es-tu d'accord ?`)) {
+                eleve.points += pointsObtenus;
+                eleve.exercicesValides.push(exerciceId);
+                sauvegarderProgression();
+                mettreAJourAffichageEleve();
+                
+                const compareBtn = document.getElementById(`compare-${exerciceId}`);
+                if (compareBtn) {
+                    compareBtn.disabled = true;
+                }
+                
+                alert(`✅ ${pointsObtenus} point${pointsObtenus > 1 ? 's' : ''} ajouté${pointsObtenus > 1 ? 's' : ''} à ton score !`);
+            }
+        }
+
+        // ==================== FONCTION RETOUR ====================
+        function retourAccueil() {
+            // Redirige vers une page d'accueil ou recharger la page
+            if (confirm("Retourner à l'accueil ? Ta progression sera conservée.")) {
+                // Option 1: Recharger la page (simule un retour)
+                location.reload();
+                // Option 2: Rediriger vers une autre page (à décommenter si besoin)
+                // window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+</html>
