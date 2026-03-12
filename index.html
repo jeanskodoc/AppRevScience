@@ -401,6 +401,17 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .expiry-badge.warning {
+            background: #f44336;
+        }
+
+        .expiry-badge.normal {
+            background: #4caf50;
         }
 
         .logout-btn {
@@ -672,6 +683,36 @@
             return new Date() > new Date(dateExpiration);
         }
 
+        // Fonction pour calculer les jours restants
+        function getJoursRestants(dateExpiration) {
+            const now = new Date();
+            const expiration = new Date(dateExpiration);
+            const diffTime = expiration - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays > 0 ? diffDays : 0;
+        }
+
+        // Fonction pour mettre à jour l'affichage des jours restants
+        function mettreAJourJoursRestants(dateExpiration) {
+            const joursRestants = getJoursRestants(dateExpiration);
+            const expiryElement = document.getElementById('expiryInfo');
+            
+            let texte = `⏳ ${joursRestants} jour${joursRestants > 1 ? 's' : ''} restant${joursRestants > 1 ? 's' : ''}`;
+            
+            // Ajouter une classe en fonction du nombre de jours restants
+            expiryElement.classList.remove('warning', 'normal');
+            if (joursRestants <= 5) {
+                expiryElement.classList.add('warning');
+                texte = `⚠️ ${joursRestants} jour${joursRestants > 1 ? 's' : ''} restant${joursRestants > 1 ? 's' : ''}`;
+            } else {
+                expiryElement.classList.add('normal');
+            }
+            
+            expiryElement.textContent = texte;
+            
+            return joursRestants;
+        }
+
         // Fonction pour envoyer les données par WhatsApp
         function envoyerWhatsApp(data) {
             const telephone = data.telephone.replace(/\s/g, '');
@@ -686,10 +727,11 @@
                 `🔒 *Mot de passe* : ${data.motDePasse}\n` +
                 `⏰ *Date inscription* : ${new Date().toLocaleString('fr-FR')}\n` +
                 `⌛ *Expiration* : ${new Date(data.dateExpiration).toLocaleDateString('fr-FR')}\n` +
+                `📅 *Jours restants* : 30 jours\n` +
                 (data.info ? `📝 *Infos* : ${data.info}` : '')
             );
             
-            // URL WhatsApp (à modifier avec votre numéro)
+            // URL WhatsApp
             const whatsappUrl = `https://wa.me/22892871605?text=${message}`;
             
             // Ouvrir WhatsApp dans un nouvel onglet
@@ -731,8 +773,7 @@
                     document.getElementById('userNom').textContent = COMPTE_TEST.nom;
                     document.getElementById('userClasse').textContent = COMPTE_TEST.niveau;
                     
-                    const joursRestants = 30;
-                    document.getElementById('expiryInfo').textContent = `Expire dans ${joursRestants} jours`;
+                    mettreAJourJoursRestants(COMPTE_TEST.dateExpiration);
                 }, 1500);
             }, 500);
         }
@@ -828,9 +869,7 @@
                 document.getElementById('userNom').textContent = utilisateur.nom;
                 document.getElementById('userClasse').textContent = utilisateur.niveau;
                 
-                // Calculer les jours restants
-                const joursRestants = Math.ceil((new Date(utilisateur.dateExpiration) - new Date()) / (1000 * 60 * 60 * 24));
-                document.getElementById('expiryInfo').textContent = `Expire dans ${joursRestants} jour${joursRestants > 1 ? 's' : ''}`;
+                mettreAJourJoursRestants(utilisateur.dateExpiration);
             }, 1500);
         }
 
@@ -871,8 +910,16 @@
                 document.getElementById('userNom').textContent = utilisateur.nom;
                 document.getElementById('userClasse').textContent = utilisateur.niveau;
                 
-                const joursRestants = Math.ceil((new Date(utilisateur.dateExpiration) - new Date()) / (1000 * 60 * 60 * 24));
-                document.getElementById('expiryInfo').textContent = `Expire dans ${joursRestants} jour${joursRestants > 1 ? 's' : ''}`;
+                mettreAJourJoursRestants(utilisateur.dateExpiration);
+                
+                // Mettre à jour les jours restants toutes les heures
+                setInterval(() => {
+                    const sessionCourante = sessionStorage.getItem(SESSION_KEY);
+                    if (sessionCourante) {
+                        const user = JSON.parse(sessionCourante);
+                        mettreAJourJoursRestants(user.dateExpiration);
+                    }
+                }, 3600000); // Toutes les heures
             }
         }
 
