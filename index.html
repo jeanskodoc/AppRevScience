@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
@@ -297,15 +297,15 @@
 
         .subjects-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
             padding: 10px 0;
         }
 
         .subject-card {
             background: white;
-            border-radius: 16px;
-            padding: 20px 15px;
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             transition: all 0.3s;
@@ -314,7 +314,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
         .subject-card:hover {
@@ -324,13 +324,13 @@
         }
 
         .subject-icon {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 5px;
             transition: all 0.3s;
         }
@@ -340,7 +340,7 @@
         }
 
         .subject-title {
-            font-size: clamp(1.2rem, 5vw, 1.5rem);
+            font-size: clamp(1.2rem, 5vw, 1.6rem);
             font-weight: bold;
             color: #2d3748;
         }
@@ -352,35 +352,48 @@
             margin: 5px 0;
         }
 
-        .access-btn {
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .access-btn, .exercise-btn {
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 25px;
             font-size: clamp(0.85rem, 3.5vw, 0.95rem);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            width: 100%;
-            max-width: 160px;
-            margin-top: 8px;
+            flex: 1;
+            min-width: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
         }
 
-        .access-btn:hover {
+        .access-btn:hover, .exercise-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .maths-icon { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
         .maths-btn { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); }
+        .maths-exercise { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }
+        
         .pct-icon { background: linear-gradient(135deg, #1a3b5e 0%, #164a5f 100%); color: white; }
         .pct-btn { background: linear-gradient(135deg, #1a3b5e 0%, #164a5f 100%); }
+        .pct-exercise { background: linear-gradient(135deg, #164a5f 0%, #0e3a4a 100%); }
+        
         .svt-icon { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
         .svt-btn { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+        .svt-exercise { background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%); }
 
         .user-info {
             display: flex;
@@ -408,6 +421,12 @@
 
         .expiry-badge.warning {
             background: #f44336;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .expiry-badge.normal {
@@ -442,14 +461,183 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .subjects-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
             
             .user-info {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .access-btn, .exercise-btn {
+                width: 100%;
+            }
+            
+            .subject-card {
+                padding: 15px;
+            }
+            
+            .subject-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .tabs {
+                gap: 5px;
+            }
+            
+            .tab-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Modal pour les exercices */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close-modal:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .exercise-item {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s;
+        }
+
+        .exercise-item:hover {
+            transform: translateX(5px);
+            background: #e9ecef;
+        }
+
+        .exercise-question {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .exercise-answer {
+            color: #666;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #dee2e6;
+            display: none;
+        }
+
+        .show-answer-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            transition: background 0.3s;
+        }
+
+        .show-answer-btn:hover {
+            background: #764ba2;
+        }
+
+        @media (max-width: 600px) {
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .exercise-question {
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -569,23 +757,32 @@
                 <!-- Collège -->
                 <div id="contentCollege" class="tab-content active">
                     <div class="subjects-grid">
-                        <div class="subject-card" onclick="accederMatiere('maths', 'college')">
+                        <div class="subject-card">
                             <div class="subject-icon maths-icon">📐</div>
                             <div class="subject-title">Mathématiques</div>
                             <div class="subject-desc">Nombres et calculs<br>Géométrie<br>Probabilités</div>
-                            <button class="access-btn maths-btn" onclick="event.stopPropagation(); accederMatiere('maths', 'college')">📊 Réviser</button>
+                            <div class="buttons-container">
+                                <button class="access-btn maths-btn" onclick="accederMatiere('maths', 'college')">📊 Réviser</button>
+                                <button class="exercise-btn maths-exercise" onclick="ouvrirExercices('maths', 'college')">✏️ Exercices</button>
+                            </div>
                         </div>
-                        <div class="subject-card" onclick="accederMatiere('pct', 'college')">
+                        <div class="subject-card">
                             <div class="subject-icon pct-icon">⚛️</div>
                             <div class="subject-title">Physique-Chimie & Techno</div>
                             <div class="subject-desc">Électricité<br>Chimie<br>Automatismes</div>
-                            <button class="access-btn pct-btn" onclick="event.stopPropagation(); accederMatiere('pct', 'college')">🔧 Réviser</button>
+                            <div class="buttons-container">
+                                <button class="access-btn pct-btn" onclick="accederMatiere('pct', 'college')">🔧 Réviser</button>
+                                <button class="exercise-btn pct-exercise" onclick="ouvrirExercices('pct', 'college')">✏️ Exercices</button>
+                            </div>
                         </div>
-                        <div class="subject-card" onclick="accederMatiere('svt', 'college')">
+                        <div class="subject-card">
                             <div class="subject-icon svt-icon">🌱</div>
                             <div class="subject-title">SVT</div>
                             <div class="subject-desc">Le vivant<br>Corps humain<br>Planète Terre</div>
-                            <button class="access-btn svt-btn" onclick="event.stopPropagation(); accederMatiere('svt', 'college')">🔬 Réviser</button>
+                            <div class="buttons-container">
+                                <button class="access-btn svt-btn" onclick="accederMatiere('svt', 'college')">🔬 Réviser</button>
+                                <button class="exercise-btn svt-exercise" onclick="ouvrirExercices('svt', 'college')">✏️ Exercices</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -593,23 +790,32 @@
                 <!-- Lycée -->
                 <div id="contentLycee" class="tab-content">
                     <div class="subjects-grid">
-                        <div class="subject-card" onclick="accederMatiere('maths', 'lycee')">
+                        <div class="subject-card">
                             <div class="subject-icon maths-icon">📐</div>
                             <div class="subject-title">Mathématiques</div>
                             <div class="subject-desc">Analyse<br>Géométrie spatiale<br>Probabilités</div>
-                            <button class="access-btn maths-btn" onclick="event.stopPropagation(); accederMatiere('maths', 'lycee')">📊 Réviser</button>
+                            <div class="buttons-container">
+                                <button class="access-btn maths-btn" onclick="accederMatiere('maths', 'lycee')">📊 Réviser</button>
+                                <button class="exercise-btn maths-exercise" onclick="ouvrirExercices('maths', 'lycee')">✏️ Exercices</button>
+                            </div>
                         </div>
-                        <div class="subject-card" onclick="accederMatiere('pct', 'lycee')">
+                        <div class="subject-card">
                             <div class="subject-icon pct-icon">⚛️</div>
                             <div class="subject-title">Physique-Chimie</div>
                             <div class="subject-desc">Mécanique<br>Chimie organique<br>Ondes</div>
-                            <button class="access-btn pct-btn" onclick="event.stopPropagation(); accederMatiere('pct', 'lycee')">🔬 Réviser</button>
+                            <div class="buttons-container">
+                                <button class="access-btn pct-btn" onclick="accederMatiere('pct', 'lycee')">🔬 Réviser</button>
+                                <button class="exercise-btn pct-exercise" onclick="ouvrirExercices('pct', 'lycee')">✏️ Exercices</button>
+                            </div>
                         </div>
-                        <div class="subject-card" onclick="accederMatiere('svt', 'lycee')">
+                        <div class="subject-card">
                             <div class="subject-icon svt-icon">🌱</div>
                             <div class="subject-title">SVT</div>
                             <div class="subject-desc">Génétique<br>Écosystèmes<br>Géologie</div>
-                            <button class="access-btn svt-btn" onclick="event.stopPropagation(); accederMatiere('svt', 'lycee')">🔬 Réviser</button>
+                            <div class="buttons-container">
+                                <button class="access-btn svt-btn" onclick="accederMatiere('svt', 'lycee')">🔬 Réviser</button>
+                                <button class="exercise-btn svt-exercise" onclick="ouvrirExercices('svt', 'lycee')">✏️ Exercices</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -618,7 +824,20 @@
 
         <div class="footer">
             <p>✨ Plateforme de révision interactive ✨</p>
-            <p style="font-size: 0.8rem;">Connectez-vous ou créez un compte pour accéder aux révisions</p>
+            <p style="font-size: 0.8rem;">Connectez-vous ou créez un compte pour accéder aux révisions et exercices</p>
+        </div>
+    </div>
+
+    <!-- Modal pour les exercices -->
+    <div id="exerciseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Exercices d'application</h2>
+                <button class="close-modal" onclick="fermerModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Le contenu des exercices sera chargé ici -->
+            </div>
         </div>
     </div>
 
@@ -637,31 +856,58 @@
             identifiant: 'KOLA',
             motDePasse: 'KOLA1@',
             dateInscription: new Date().toISOString(),
-            dateExpiration: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 jours
+            dateExpiration: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         };
 
-        // Initialiser le compte test au démarrage
+        // Base de données d'exercices
+        const exercicesDB = {
+            'maths-college': [
+                { question: "Calcule : 15 + 8 × 3", reponse: "15 + 24 = 39" },
+                { question: "Résoudre : 2x + 5 = 13", reponse: "2x = 8, donc x = 4" },
+                { question: "Calcule l'aire d'un carré de côté 7 cm", reponse: "Aire = 7 × 7 = 49 cm²" }
+            ],
+            'maths-lycee': [
+                { question: "Dériver f(x) = 3x² + 2x - 5", reponse: "f'(x) = 6x + 2" },
+                { question: "Résoudre : x² - 5x + 6 = 0", reponse: "Δ = 1, x1 = 2, x2 = 3" },
+                { question: "Calculer la limite de (x²-1)/(x-1) quand x→1", reponse: "lim = 2" }
+            ],
+            'pct-college': [
+                { question: "Quelle est la formule de la loi d'Ohm ?", reponse: "U = R × I" },
+                { question: "Quel est le symbole de l'hydrogène ?", reponse: "H" },
+                { question: "Cite 3 états de la matière", reponse: "Solide, liquide, gazeux" }
+            ],
+            'pct-lycee': [
+                { question: "Énoncer la deuxième loi de Newton", reponse: "ΣF = m × a" },
+                { question: "Qu'est-ce que l'effet photoélectrique ?", reponse: "Émission d'électrons par un matériau sous l'effet de la lumière" },
+                { question: "Calculer l'énergie cinétique d'un objet de 2 kg à 3 m/s", reponse: "Ec = ½ × 2 × 3² = 9 J" }
+            ],
+            'svt-college': [
+                { question: "Cite les 4 groupes sanguins", reponse: "A, B, AB, O" },
+                { question: "Quel est le rôle des globules rouges ?", reponse: "Transporter l'oxygène" },
+                { question: "Comment s'appelle la science qui étudie les fossiles ?", reponse: "La paléontologie" }
+            ],
+            'svt-lycee': [
+                { question: "Qu'est-ce que la mitose ?", reponse: "Division cellulaire donnant deux cellules filles identiques" },
+                { question: "Définir la photosynthèse", reponse: "Conversion de l'énergie lumineuse en énergie chimique par les plantes" },
+                { question: "Qu'est-ce que la sélection naturelle ?", reponse: "Mécanisme d'évolution où les individus adaptés survivent" }
+            ]
+        };
+
         function initialiserCompteTest() {
             let users = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            
-            // Vérifier si le compte test existe déjà
             const testExiste = users.some(u => u.identifiant === 'KOLA');
-            
             if (!testExiste) {
                 users.push(COMPTE_TEST);
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
-                console.log('Compte test créé');
             }
         }
 
-        // Fonction pour générer un identifiant unique
         function genererIdentifiant(nom) {
             const prefix = nom.toLowerCase().replace(/[^a-z]/g, '').substring(0, 4);
             const random = Math.floor(1000 + Math.random() * 9000);
-            return `${prefix}${random}`;
+            return `${prefix}${random}`.toUpperCase();
         }
 
-        // Fonction pour générer un mot de passe aléatoire
         function genererMotDePasse() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
             let password = '';
@@ -671,19 +917,16 @@
             return password;
         }
 
-        // Fonction pour calculer la date d'expiration (30 jours)
         function getDateExpiration() {
             const date = new Date();
             date.setDate(date.getDate() + 30);
             return date.toISOString();
         }
 
-        // Fonction pour vérifier si un compte est expiré
         function estCompteExpire(dateExpiration) {
             return new Date() > new Date(dateExpiration);
         }
 
-        // Fonction pour calculer les jours restants
         function getJoursRestants(dateExpiration) {
             const now = new Date();
             const expiration = new Date(dateExpiration);
@@ -692,14 +935,10 @@
             return diffDays > 0 ? diffDays : 0;
         }
 
-        // Fonction pour mettre à jour l'affichage des jours restants
         function mettreAJourJoursRestants(dateExpiration) {
             const joursRestants = getJoursRestants(dateExpiration);
             const expiryElement = document.getElementById('expiryInfo');
-            
             let texte = `⏳ ${joursRestants} jour${joursRestants > 1 ? 's' : ''} restant${joursRestants > 1 ? 's' : ''}`;
-            
-            // Ajouter une classe en fonction du nombre de jours restants
             expiryElement.classList.remove('warning', 'normal');
             if (joursRestants <= 5) {
                 expiryElement.classList.add('warning');
@@ -707,13 +946,10 @@
             } else {
                 expiryElement.classList.add('normal');
             }
-            
             expiryElement.textContent = texte;
-            
             return joursRestants;
         }
 
-        // Fonction pour envoyer les données par WhatsApp
         function envoyerWhatsApp(data) {
             const telephone = data.telephone.replace(/\s/g, '');
             const message = encodeURIComponent(
@@ -722,67 +958,42 @@
                 `🎂 *Âge* : ${data.age}\n` +
                 `📚 *Niveau* : ${data.niveau}\n` +
                 `🏫 *Établissement* : ${data.etablissement}\n` +
-                `📱 *Téléphone* : ${data.telephone}\n` +
                 `🔑 *Identifiant* : ${data.identifiant}\n` +
                 `🔒 *Mot de passe* : ${data.motDePasse}\n` +
-                `⏰ *Date inscription* : ${new Date().toLocaleString('fr-FR')}\n` +
-                `⌛ *Expiration* : ${new Date(data.dateExpiration).toLocaleDateString('fr-FR')}\n` +
-                `📅 *Jours restants* : 30 jours\n` +
-                (data.info ? `📝 *Infos* : ${data.info}` : '')
+                `⏰ *Expiration* : ${new Date(data.dateExpiration).toLocaleDateString('fr-FR')}\n`
             );
-            
-            // URL WhatsApp
-            const whatsappUrl = `https://wa.me/22892871605?text=${message}`;
-            
-            // Ouvrir WhatsApp dans un nouvel onglet
-            window.open(whatsappUrl, '_blank');
+            window.open(`https://wa.me/22892871605?text=${message}`, '_blank');
         }
 
-        // Fonction pour sauvegarder un utilisateur
         function sauvegarderUtilisateur(data) {
             let users = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            
-            // Vérifier si l'identifiant existe déjà
             if (users.some(u => u.identifiant === data.identifiant)) {
                 data.identifiant = genererIdentifiant(data.nom) + Math.floor(Math.random() * 100);
             }
-            
             users.push(data);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
             return data;
         }
 
-        // Fonction pour charger les utilisateurs
         function chargerUtilisateurs() {
             return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
         }
 
-        // Fonction de connexion test
         function connexionTest() {
-            // Simuler la connexion avec le compte test
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(COMPTE_TEST));
+            afficherMessage('loginMessage', 'Connexion réussie ! Redirection...', 'success');
             setTimeout(() => {
-                sessionStorage.setItem(SESSION_KEY, JSON.stringify(COMPTE_TEST));
-                
-                afficherMessage('loginMessage', 'Connexion réussie ! Redirection...', 'success');
-                
-                setTimeout(() => {
-                    document.getElementById('authContainer').style.display = 'none';
-                    document.getElementById('mainContent').style.display = 'block';
-                    document.getElementById('userInfo').style.display = 'flex';
-                    
-                    document.getElementById('userNom').textContent = COMPTE_TEST.nom;
-                    document.getElementById('userClasse').textContent = COMPTE_TEST.niveau;
-                    
-                    mettreAJourJoursRestants(COMPTE_TEST.dateExpiration);
-                }, 1500);
-            }, 500);
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                document.getElementById('userInfo').style.display = 'flex';
+                document.getElementById('userNom').textContent = COMPTE_TEST.nom;
+                document.getElementById('userClasse').textContent = COMPTE_TEST.niveau;
+                mettreAJourJoursRestants(COMPTE_TEST.dateExpiration);
+            }, 1500);
         }
 
-        // Fonction d'inscription
         function inscription(event) {
             event.preventDefault();
-            
-            // Récupérer les données du formulaire
             const nom = document.getElementById('registerNom').value;
             const age = document.getElementById('registerAge').value;
             const niveau = document.getElementById('registerNiveau').value;
@@ -790,56 +1001,36 @@
             const telephone = document.getElementById('registerTel').value;
             const info = document.getElementById('registerInfo').value;
             
-            // Vérifications de base
             if (!nom || !age || !niveau || !etablissement || !telephone) {
                 afficherMessage('registerMessage', 'Veuillez remplir tous les champs obligatoires', 'error');
                 return;
             }
             
-            // Générer identifiant et mot de passe
             const identifiant = genererIdentifiant(nom);
             const motDePasse = genererMotDePasse();
             const dateExpiration = getDateExpiration();
             
-            // Créer l'objet utilisateur
             const nouvelUtilisateur = {
-                nom,
-                age,
-                niveau,
-                etablissement,
-                telephone,
+                nom, age, niveau, etablissement, telephone,
                 info: info || 'Aucune information supplémentaire',
-                identifiant,
-                motDePasse,
+                identifiant, motDePasse,
                 dateInscription: new Date().toISOString(),
                 dateExpiration
             };
             
-            // Sauvegarder
             sauvegarderUtilisateur(nouvelUtilisateur);
-            
-            // Afficher les identifiants
             document.getElementById('generatedIdentifiant').textContent = identifiant;
             document.getElementById('generatedPassword').textContent = motDePasse;
             document.getElementById('generatedCredentials').style.display = 'block';
-            
-            // Message de succès
             afficherMessage('registerMessage', 'Compte créé avec succès !', 'success');
-            
-            // Envoyer par WhatsApp
             envoyerWhatsApp(nouvelUtilisateur);
-            
-            // Réinitialiser le formulaire
             document.getElementById('registerForm').reset();
         }
 
-        // Fonction de connexion
         function connexion(event) {
             event.preventDefault();
-            
             const identifiant = document.getElementById('loginIdentifiant').value;
             const motDePasse = document.getElementById('loginPassword').value;
-            
             const users = chargerUtilisateurs();
             const utilisateur = users.find(u => u.identifiant === identifiant && u.motDePasse === motDePasse);
             
@@ -848,94 +1039,59 @@
                 return;
             }
             
-            // Vérifier l'expiration
             if (estCompteExpire(utilisateur.dateExpiration)) {
-                afficherMessage('loginMessage', 'Ce compte a expiré. Veuillez contacter l\'administrateur.', 'error');
+                afficherMessage('loginMessage', 'Ce compte a expiré.', 'error');
                 return;
             }
             
-            // Connexion réussie
             sessionStorage.setItem(SESSION_KEY, JSON.stringify(utilisateur));
-            
-            afficherMessage('loginMessage', 'Connexion réussie ! Redirection...', 'success');
-            
-            // Rediriger après un court délai
+            afficherMessage('loginMessage', 'Connexion réussie !', 'success');
             setTimeout(() => {
                 document.getElementById('authContainer').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
                 document.getElementById('userInfo').style.display = 'flex';
-                
-                // Afficher les infos utilisateur
                 document.getElementById('userNom').textContent = utilisateur.nom;
                 document.getElementById('userClasse').textContent = utilisateur.niveau;
-                
                 mettreAJourJoursRestants(utilisateur.dateExpiration);
             }, 1500);
         }
 
-        // Fonction de déconnexion
         function deconnexion() {
             sessionStorage.removeItem(SESSION_KEY);
             document.getElementById('authContainer').style.display = 'block';
             document.getElementById('mainContent').style.display = 'none';
             document.getElementById('userInfo').style.display = 'none';
-            
-            // Réinitialiser les formulaires
             document.getElementById('loginForm').reset();
             document.getElementById('registerForm').reset();
             document.getElementById('generatedCredentials').style.display = 'none';
-            document.getElementById('loginMessage').style.display = 'none';
-            document.getElementById('registerMessage').style.display = 'none';
-            
-            // Revenir à l'onglet connexion
             switchAuthTab('login');
         }
 
-        // Vérifier session au chargement
         function verifierSession() {
             const session = sessionStorage.getItem(SESSION_KEY);
             if (session) {
                 const utilisateur = JSON.parse(session);
-                
-                // Vérifier expiration
                 if (estCompteExpire(utilisateur.dateExpiration)) {
                     sessionStorage.removeItem(SESSION_KEY);
                     return;
                 }
-                
                 document.getElementById('authContainer').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
                 document.getElementById('userInfo').style.display = 'flex';
-                
                 document.getElementById('userNom').textContent = utilisateur.nom;
                 document.getElementById('userClasse').textContent = utilisateur.niveau;
-                
                 mettreAJourJoursRestants(utilisateur.dateExpiration);
-                
-                // Mettre à jour les jours restants toutes les heures
-                setInterval(() => {
-                    const sessionCourante = sessionStorage.getItem(SESSION_KEY);
-                    if (sessionCourante) {
-                        const user = JSON.parse(sessionCourante);
-                        mettreAJourJoursRestants(user.dateExpiration);
-                    }
-                }, 3600000); // Toutes les heures
             }
         }
 
-        // Fonction pour afficher les messages
         function afficherMessage(elementId, texte, type) {
             const element = document.getElementById(elementId);
             element.textContent = texte;
             element.className = `message ${type}`;
             element.style.display = 'block';
-            
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, 5000);
+            setTimeout(() => element.style.display = 'none', 5000);
         }
 
-        // Fonction pour changer d'onglet d'authentification
         function switchAuthTab(tab) {
             const loginTab = document.getElementById('loginTab');
             const registerTab = document.getElementById('registerTab');
@@ -953,13 +1109,8 @@
                 registerForm.classList.add('active');
                 loginForm.classList.remove('active');
             }
-            
-            // Cacher les messages
-            document.getElementById('loginMessage').style.display = 'none';
-            document.getElementById('registerMessage').style.display = 'none';
         }
 
-        // Fonction pour changer d'onglet (collège/lycée)
         function changerOnglet(onglet) {
             document.getElementById('tabCollege').classList.remove('active');
             document.getElementById('tabLycee').classList.remove('active');
@@ -975,27 +1126,81 @@
             }
         }
 
-        // Fonction pour accéder aux matières
         function accederMatiere(matiere, niveau) {
             let fichier = '';
-            
             if (niveau === 'college') {
-                // Collège : fichiers avec préfixe App
                 if (matiere === 'maths') fichier = 'AppMATHS.html';
                 else if (matiere === 'pct') fichier = 'AppPCT.html';
                 else if (matiere === 'svt') fichier = 'AppSVT.html';
             } else {
-                // Lycée : fichiers sans préfixe
                 if (matiere === 'maths') fichier = 'Maths.html';
                 else if (matiere === 'pct') fichier = 'PC.html';
                 else if (matiere === 'svt') fichier = 'SVT.html';
             }
-            
-            // Rediriger
             window.location.href = fichier;
         }
 
-        // Initialiser au chargement
+        function ouvrirExercices(matiere, niveau) {
+            const key = `${matiere}-${niveau}`;
+            const exercices = exercicesDB[key] || exercicesDB[`${matiere}-college`] || [];
+            
+            const modal = document.getElementById('exerciseModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            const matiereNoms = {
+                maths: 'Mathématiques',
+                pct: 'Physique-Chimie',
+                svt: 'SVT'
+            };
+            
+            modalTitle.innerHTML = `✏️ Exercices d'application - ${matiereNoms[matiere]} (${niveau === 'college' ? 'Collège' : 'Lycée'})`;
+            
+            if (exercices.length === 0) {
+                modalBody.innerHTML = '<p style="text-align: center; padding: 40px;">📚 Aucun exercice disponible pour le moment. Revenez bientôt !</p>';
+            } else {
+                let html = '<ul class="exercise-list">';
+                exercices.forEach((exo, index) => {
+                    html += `
+                        <li class="exercise-item">
+                            <div class="exercise-question">📝 Exercice ${index + 1} : ${exo.question}</div>
+                            <button class="show-answer-btn" onclick="toggleReponse(this)">Afficher la réponse</button>
+                            <div class="exercise-answer">💡 Réponse : ${exo.reponse}</div>
+                        </li>
+                    `;
+                });
+                html += '</ul>';
+                modalBody.innerHTML = html;
+            }
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function toggleReponse(btn) {
+            const answerDiv = btn.nextElementSibling;
+            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                answerDiv.style.display = 'block';
+                btn.textContent = 'Masquer la réponse';
+            } else {
+                answerDiv.style.display = 'none';
+                btn.textContent = 'Afficher la réponse';
+            }
+        }
+        
+        function fermerModal() {
+            const modal = document.getElementById('exerciseModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('exerciseModal');
+            if (event.target === modal) {
+                fermerModal();
+            }
+        });
+
         window.addEventListener('load', () => {
             initialiserCompteTest();
             verifierSession();
