@@ -506,140 +506,6 @@
                 font-size: 0.85rem;
             }
         }
-
-        /* Modal pour les exercices */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 0;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 16px 16px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 28px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .close-modal:hover {
-            transform: scale(1.1);
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .exercise-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .exercise-item {
-            background: #f8f9fa;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-            transition: transform 0.3s;
-        }
-
-        .exercise-item:hover {
-            transform: translateX(5px);
-            background: #e9ecef;
-        }
-
-        .exercise-question {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-size: 1.05rem;
-        }
-
-        .exercise-answer {
-            color: #666;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed #dee2e6;
-            display: none;
-        }
-
-        .show-answer-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            transition: background 0.3s;
-        }
-
-        .show-answer-btn:hover {
-            background: #764ba2;
-        }
-
-        @media (max-width: 600px) {
-            .modal-content {
-                width: 95%;
-                margin: 10% auto;
-            }
-            
-            .modal-header h2 {
-                font-size: 1.2rem;
-            }
-            
-            .exercise-question {
-                font-size: 0.95rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -763,7 +629,7 @@
                             <div class="subject-desc">Nombres et calculs<br>Géométrie<br>Probabilités</div>
                             <div class="buttons-container">
                                 <button class="access-btn maths-btn" onclick="accederMatiere('maths', 'college')">📊 Réviser</button>
-                                <button class="exercise-btn maths-exercise" onclick="ouvrirExercices('maths', 'college')">✏️ Exercices</button>
+                                <button class="exercise-btn maths-exercise" onclick="ouvrirExerciceFile('maths', 'college')">📘 Exercices</button>
                             </div>
                         </div>
                         <div class="subject-card">
@@ -772,7 +638,7 @@
                             <div class="subject-desc">Électricité<br>Chimie<br>Automatismes</div>
                             <div class="buttons-container">
                                 <button class="access-btn pct-btn" onclick="accederMatiere('pct', 'college')">🔧 Réviser</button>
-                                <button class="exercise-btn pct-exercise" onclick="ouvrirExercices('pct', 'college')">✏️ Exercices</button>
+                                <button class="exercise-btn pct-exercise" onclick="ouvrirExerciceFile('pct', 'college')">📘 Exercices</button>
                             </div>
                         </div>
                         <div class="subject-card">
@@ -781,7 +647,7 @@
                             <div class="subject-desc">Le vivant<br>Corps humain<br>Planète Terre</div>
                             <div class="buttons-container">
                                 <button class="access-btn svt-btn" onclick="accederMatiere('svt', 'college')">🔬 Réviser</button>
-                                <button class="exercise-btn svt-exercise" onclick="ouvrirExercices('svt', 'college')">✏️ Exercices</button>
+                                <button class="exercise-btn svt-exercise" onclick="ouvrirExerciceFile('svt', 'college')">📘 Exercices</button>
                             </div>
                         </div>
                     </div>
@@ -796,7 +662,7 @@
                             <div class="subject-desc">Analyse<br>Géométrie spatiale<br>Probabilités</div>
                             <div class="buttons-container">
                                 <button class="access-btn maths-btn" onclick="accederMatiere('maths', 'lycee')">📊 Réviser</button>
-                                <button class="exercise-btn maths-exercise" onclick="ouvrirExercices('maths', 'lycee')">✏️ Exercices</button>
+                                <button class="exercise-btn maths-exercise" onclick="ouvrirExerciceFile('maths', 'lycee')">📘 Exercices</button>
                             </div>
                         </div>
                         <div class="subject-card">
@@ -805,7 +671,7 @@
                             <div class="subject-desc">Mécanique<br>Chimie organique<br>Ondes</div>
                             <div class="buttons-container">
                                 <button class="access-btn pct-btn" onclick="accederMatiere('pct', 'lycee')">🔬 Réviser</button>
-                                <button class="exercise-btn pct-exercise" onclick="ouvrirExercices('pct', 'lycee')">✏️ Exercices</button>
+                                <button class="exercise-btn pct-exercise" onclick="ouvrirExerciceFile('pct', 'lycee')">📘 Exercices</button>
                             </div>
                         </div>
                         <div class="subject-card">
@@ -814,7 +680,7 @@
                             <div class="subject-desc">Génétique<br>Écosystèmes<br>Géologie</div>
                             <div class="buttons-container">
                                 <button class="access-btn svt-btn" onclick="accederMatiere('svt', 'lycee')">🔬 Réviser</button>
-                                <button class="exercise-btn svt-exercise" onclick="ouvrirExercices('svt', 'lycee')">✏️ Exercices</button>
+                                <button class="exercise-btn svt-exercise" onclick="ouvrirExerciceFile('svt', 'lycee')">📘 Exercices</button>
                             </div>
                         </div>
                     </div>
@@ -825,19 +691,6 @@
         <div class="footer">
             <p>✨ Plateforme de révision interactive ✨</p>
             <p style="font-size: 0.8rem;">Connectez-vous ou créez un compte pour accéder aux révisions et exercices</p>
-        </div>
-    </div>
-
-    <!-- Modal pour les exercices -->
-    <div id="exerciseModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Exercices d'application</h2>
-                <button class="close-modal" onclick="fermerModal()">&times;</button>
-            </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Le contenu des exercices sera chargé ici -->
-            </div>
         </div>
     </div>
 
@@ -857,40 +710,6 @@
             motDePasse: 'KOLA1@',
             dateInscription: new Date().toISOString(),
             dateExpiration: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        };
-
-        // Base de données d'exercices
-        const exercicesDB = {
-            'maths-college': [
-                { question: "Calcule : 15 + 8 × 3", reponse: "15 + 24 = 39" },
-                { question: "Résoudre : 2x + 5 = 13", reponse: "2x = 8, donc x = 4" },
-                { question: "Calcule l'aire d'un carré de côté 7 cm", reponse: "Aire = 7 × 7 = 49 cm²" }
-            ],
-            'maths-lycee': [
-                { question: "Dériver f(x) = 3x² + 2x - 5", reponse: "f'(x) = 6x + 2" },
-                { question: "Résoudre : x² - 5x + 6 = 0", reponse: "Δ = 1, x1 = 2, x2 = 3" },
-                { question: "Calculer la limite de (x²-1)/(x-1) quand x→1", reponse: "lim = 2" }
-            ],
-            'pct-college': [
-                { question: "Quelle est la formule de la loi d'Ohm ?", reponse: "U = R × I" },
-                { question: "Quel est le symbole de l'hydrogène ?", reponse: "H" },
-                { question: "Cite 3 états de la matière", reponse: "Solide, liquide, gazeux" }
-            ],
-            'pct-lycee': [
-                { question: "Énoncer la deuxième loi de Newton", reponse: "ΣF = m × a" },
-                { question: "Qu'est-ce que l'effet photoélectrique ?", reponse: "Émission d'électrons par un matériau sous l'effet de la lumière" },
-                { question: "Calculer l'énergie cinétique d'un objet de 2 kg à 3 m/s", reponse: "Ec = ½ × 2 × 3² = 9 J" }
-            ],
-            'svt-college': [
-                { question: "Cite les 4 groupes sanguins", reponse: "A, B, AB, O" },
-                { question: "Quel est le rôle des globules rouges ?", reponse: "Transporter l'oxygène" },
-                { question: "Comment s'appelle la science qui étudie les fossiles ?", reponse: "La paléontologie" }
-            ],
-            'svt-lycee': [
-                { question: "Qu'est-ce que la mitose ?", reponse: "Division cellulaire donnant deux cellules filles identiques" },
-                { question: "Définir la photosynthèse", reponse: "Conversion de l'énergie lumineuse en énergie chimique par les plantes" },
-                { question: "Qu'est-ce que la sélection naturelle ?", reponse: "Mécanisme d'évolution où les individus adaptés survivent" }
-            ]
         };
 
         function initialiserCompteTest() {
@@ -1140,66 +959,23 @@
             window.location.href = fichier;
         }
 
-        function ouvrirExercices(matiere, niveau) {
-            const key = `${matiere}-${niveau}`;
-            const exercices = exercicesDB[key] || exercicesDB[`${matiere}-college`] || [];
+        // Fonction unique pour ouvrir les fichiers d'exercices
+        function ouvrirExerciceFile(matiere, niveau) {
+            let fichier = '';
             
-            const modal = document.getElementById('exerciseModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalBody = document.getElementById('modalBody');
-            
-            const matiereNoms = {
-                maths: 'Mathématiques',
-                pct: 'Physique-Chimie',
-                svt: 'SVT'
-            };
-            
-            modalTitle.innerHTML = `✏️ Exercices d'application - ${matiereNoms[matiere]} (${niveau === 'college' ? 'Collège' : 'Lycée'})`;
-            
-            if (exercices.length === 0) {
-                modalBody.innerHTML = '<p style="text-align: center; padding: 40px;">📚 Aucun exercice disponible pour le moment. Revenez bientôt !</p>';
+            if (niveau === 'college') {
+                if (matiere === 'maths') fichier = 'AppMATHS_Exercices.html';
+                else if (matiere === 'pct') fichier = 'AppMPCT.html';
+                else if (matiere === 'svt') fichier = 'AppSVT_Exercices.html';
             } else {
-                let html = '<ul class="exercise-list">';
-                exercices.forEach((exo, index) => {
-                    html += `
-                        <li class="exercise-item">
-                            <div class="exercise-question">📝 Exercice ${index + 1} : ${exo.question}</div>
-                            <button class="show-answer-btn" onclick="toggleReponse(this)">Afficher la réponse</button>
-                            <div class="exercise-answer">💡 Réponse : ${exo.reponse}</div>
-                        </li>
-                    `;
-                });
-                html += '</ul>';
-                modalBody.innerHTML = html;
+                if (matiere === 'maths') fichier = 'Maths_Exercices.html';
+                else if (matiere === 'pct') fichier = 'PC_Exercices.html';
+                else if (matiere === 'svt') fichier = 'SVT_Exercices.html';
             }
             
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            // Redirection vers le fichier d'exercices correspondant
+            window.location.href = fichier;
         }
-        
-        function toggleReponse(btn) {
-            const answerDiv = btn.nextElementSibling;
-            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
-                answerDiv.style.display = 'block';
-                btn.textContent = 'Masquer la réponse';
-            } else {
-                answerDiv.style.display = 'none';
-                btn.textContent = 'Afficher la réponse';
-            }
-        }
-        
-        function fermerModal() {
-            const modal = document.getElementById('exerciseModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        window.addEventListener('click', (event) => {
-            const modal = document.getElementById('exerciseModal');
-            if (event.target === modal) {
-                fermerModal();
-            }
-        });
 
         window.addEventListener('load', () => {
             initialiserCompteTest();
